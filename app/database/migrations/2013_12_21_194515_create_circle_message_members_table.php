@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrivaciesTable extends Migration {
+class CreateCircleMessageMembersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,11 @@ class CreatePrivaciesTable extends Migration {
 	public function up()
 	{
 		//
-		Schema::create("privacies", function($table){
+		Schema::create("circle_message_members", function($table){
 			$table->bigIncrements("id");
-			$table->string("name");
-			$table->string("label");
+			$table->bigInteger("circle_id");
+			$table->bigInteger("member_id");
+			$table->enum("status", array("pending", "sent", "read"));
 			$table->timestamps();
 		});
 	}
@@ -28,7 +29,7 @@ class CreatePrivaciesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("privacies");
+		Schema::drop("circle_message_members");
 	}
 
 }

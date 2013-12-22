@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrivaciesTable extends Migration {
+class CreateMessageMediasTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,10 @@ class CreatePrivaciesTable extends Migration {
 	public function up()
 	{
 		//
-		Schema::create("privacies", function($table){
+		Schema::create("message_medias", function($table){
 			$table->bigIncrements("id");
-			$table->string("name");
-			$table->string("label");
+			$table->bigInteger("message_id");
+			$table->bigInteger("media_id");
 			$table->timestamps();
 		});
 	}
@@ -28,7 +28,7 @@ class CreatePrivaciesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("privacies");
+		Schema::drop("message_medias");
 	}
 
 }
