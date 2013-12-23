@@ -3,6 +3,5 @@
 class Circle extends Eloquent {
 
 	protected $table = "circles";
-	protected $guarded = array();
-
+	protected $fillable = array("name", "active");
 }

@@ -3,5 +3,12 @@
 class Event extends Eloquent {
 
 	protected $table = "events";
-	protected $guarded = array();
+	protected $fillable = array("title", "start_datetime", "finish_datetime", "location", "created_by");
+	protected $guarded = array("latitude", "longtitude");
+
+	// TODO: To be validated.
+	public function creator()
+	{
+		return $this->hasOne("Member", "created_by", "id");
+	}
 }

@@ -3,5 +3,11 @@
 class Media extends Eloquent {
 
 	protected $table = "medias";
-	protected $guarded = array();
+	protected $fillable = array("category", "taste", "url", "signature", "created_by");
+	protected $guarded = array("signature");
+
+	public function creator()
+	{
+		return $this->hasOne("Member", "created_by", "id");
+	}
 }

@@ -16,7 +16,7 @@ class CreateMemberCirclesTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
 			$table->bigInteger("circle_id");
-			$table->enum("status", array("active", "pending", "blocked"));
+			$table->enum("status", array("active", "pending", "blocked"))->default("active");
 			$table->timestamps();
 		});
 	}

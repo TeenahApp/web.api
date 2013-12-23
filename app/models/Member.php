@@ -3,5 +3,6 @@
 class Member extends Eloquent {
 
 	protected $table = "members";
-	protected $guarded = array();
+	protected $fillable = array("gender", "name", "dob", "is_alive");
+	protected $guarded = array("mobile", "email", "home_phone", "work_phone", "marital_status", "blood_type");
 }
