@@ -13,5 +13,6 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	$users = User::all();
+	var_dump($users);
 });
