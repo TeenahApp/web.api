@@ -8,6 +8,6 @@ class Media extends Eloquent {
 
 	public function creator()
 	{
-		return $this->hasOne("Member", "created_by", "id");
+		return $this->belongsTo("Member", "created_by");
 	}
 }

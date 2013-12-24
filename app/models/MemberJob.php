@@ -12,6 +12,6 @@ class MemberJob extends Eloquent {
 
 	public function company()
 	{
-		return $this->hasOne("JobCompany", "company_id", "id");
+		return $this->belongsTo("JobCompany", "company_id");
 	}
 }

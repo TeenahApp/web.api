@@ -3,4 +3,14 @@
 class MessageMedia extends Eloquent {
 
 	protected $table = "message_medias";
+
+	public function message()
+	{
+		return $this->belongsTo("Message");
+	}
+
+	public function media()
+	{
+		return $this->belongsTo("Media");
+	}
 }
