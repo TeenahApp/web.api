@@ -16,7 +16,7 @@ class CreateMemberPrivaciesTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
 			$table->bigInteger("privacy_id");
-			$table->enum("category", array("all", "home", "family"));
+			$table->enum("category", array("all", "home", "family"))->default("home");
 			$table->timestamps();
 		});
 	}
@@ -29,7 +29,7 @@ class CreateMemberPrivaciesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("member_privacies");
+		Schema::dropIfExists("member_privacies");
 	}
 
 }

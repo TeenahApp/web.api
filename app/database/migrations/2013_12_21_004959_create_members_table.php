@@ -16,22 +16,22 @@ class CreateMembersTable extends Migration {
 			$table->bigIncrements("id");
 			$table->enum("gender", array("male", "female"));
 			$table->string("name");
-			$table->string("fullname");
-			$table->string("nickname");
-			$table->date("dob");
-			$table->string("pob");
-			$table->date("dod");;
-			$table->string("pod");
-			$table->integer("age");
+			$table->string("fullname")->nullable()->default(null);
+			$table->string("nickname")->nullable()->default(null);
+			$table->date("dob")->nullable();
+			$table->string("pob")->nullable();
+			$table->date("dod")->nullable();
+			$table->string("pod")->nullable();
+			$table->integer("age")->default(0);
 			$table->boolean("is_alive")->default(1);
-			$table->string("photo");
-			$table->string("location");
+			$table->string("photo")->nullable();
+			$table->string("location")->nullable();
 			$table->string("mobile");
-			$table->string("email");
-			$table->string("home_phone");
-			$table->string("work_phone");
-			$table->enum("marital_status", array("single", "married", "divorced", "widow"));
-			$table->string("blood_type");
+			$table->string("email")->nullable();
+			$table->string("home_phone")->nullable();
+			$table->string("work_phone")->nullable();
+			$table->enum("marital_status", array("single", "married", "divorced", "widow"))->default("single");
+			$table->string("blood_type")->nullable();
 			$table->timestamps();
 		});
 	}
@@ -44,7 +44,7 @@ class CreateMembersTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("members");
+		Schema::dropIfExists("members");
 	}
 
 }

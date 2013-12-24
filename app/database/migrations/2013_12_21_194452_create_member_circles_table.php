@@ -29,7 +29,7 @@ class CreateMemberCirclesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("member_circles");
+		Schema::dropIfExists("member_circles");
 	}
 
 }

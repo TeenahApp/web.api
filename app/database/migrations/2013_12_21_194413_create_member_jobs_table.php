@@ -17,9 +17,9 @@ class CreateMemberJobsTable extends Migration {
 			$table->bigInteger("member_id");
 			$table->string("title");
 			$table->bigInteger("company_id");
-			$table->integer("start_year");
-			$table->integer("finish_year");
-			$table->enum("status", array("ongoing", "finished", "pending", "dropped"));
+			$table->integer("start_year")->nullable();
+			$table->integer("finish_year")->nullable();
+			$table->enum("status", array("ongoing", "finished", "pending", "dropped"))->default("ongoing");
 			$table->timestamps();
 		});
 	}
@@ -32,7 +32,7 @@ class CreateMemberJobsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("member_jobs");
+		Schema::dropIfExists("member_jobs");
 	}
 
 }

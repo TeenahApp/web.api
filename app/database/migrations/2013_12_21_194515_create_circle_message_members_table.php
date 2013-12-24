@@ -16,7 +16,7 @@ class CreateCircleMessageMembersTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("circle_id");
 			$table->bigInteger("member_id");
-			$table->enum("status", array("pending", "sent", "read"));
+			$table->enum("status", array("pending", "sent", "read"))->default("pending");
 			$table->timestamps();
 		});
 	}
@@ -29,7 +29,7 @@ class CreateCircleMessageMembersTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("circle_message_members");
+		Schema::dropIfExists("circle_message_members");
 	}
 
 }

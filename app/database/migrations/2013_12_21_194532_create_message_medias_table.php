@@ -28,7 +28,7 @@ class CreateMessageMediasTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("message_medias");
+		Schema::dropIfExists("message_medias");
 	}
 
 }

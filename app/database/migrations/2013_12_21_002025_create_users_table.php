@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration {
 			$table->bigInteger("member_id");
 			$table->string("username")->unique();
 			$table->string("password");
-			$table->string("email")->unique();
+			$table->string("email")->unique()->nullable(); // Could it be?
 			$table->boolean("active")->default(1);
 			$table->timestamps();
 		});
@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("users");
+		Schema::dropIfExists("users");
 	}
 
 }

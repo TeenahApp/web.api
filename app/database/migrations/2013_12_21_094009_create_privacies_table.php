@@ -15,7 +15,7 @@ class CreatePrivaciesTable extends Migration {
 		Schema::create("privacies", function($table){
 			$table->bigIncrements("id");
 			$table->string("name");
-			$table->string("label");
+			$table->string("label")->nullable();
 			$table->timestamps();
 		});
 	}
@@ -28,7 +28,7 @@ class CreatePrivaciesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("privacies");
+		Schema::dropIfExists("privacies");
 	}
 
 }

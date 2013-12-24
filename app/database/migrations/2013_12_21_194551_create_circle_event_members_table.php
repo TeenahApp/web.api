@@ -17,7 +17,7 @@ class CreateCircleEventMembersTable extends Migration {
 			$table->bigInteger("circle_id");
 			$table->bigInteger("event_id");
 			$table->bigInteger("member_id");
-			$table->enum("decision", array("notyet", "willcome", "apologize"));
+			$table->enum("decision", array("notyet", "willcome", "apologize"))->default("notyet");
 			$table->timestamps();
 		});
 	}
@@ -30,7 +30,7 @@ class CreateCircleEventMembersTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("circle_event_members");
+		Schema::dropIfExists("circle_event_members");
 	}
 
 }

@@ -15,7 +15,7 @@ class CreateMemberRelationsTable extends Migration {
 		Schema::create("member_relations", function($table){
 			$table->bigIncrements("id");
 			$table->bigInteger("member_a");
-			$table->enum("relationship", array("father", "mother", "brother", "sister", "child", "wife", "husband", "stepfather", "stepmother", "stepchild", "breastfeeding_mother", "breastfeeding_child"));
+			$table->enum("relationship", array("father", "mother", "brother", "sister", "child", "wife", "husband", "stepfather", "stepmother", "stepchild", "breastfeeding_mother", "breastfeeding_child"))->nullable();
 			$table->bigInteger("member_b");
 			$table->boolean("active")->default(1);
 			$table->timestamps();
@@ -31,7 +31,7 @@ class CreateMemberRelationsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("member_relations");
+		Schema::dropIfExists("member_relations");
 	}
 
 }

@@ -15,9 +15,9 @@ class CreateJobCompaniesTable extends Migration {
 		Schema::create("job_companies", function($table){
 			$table->bigIncrements("id");
 			$table->string("name");
-			$table->enum("category", array("private_limited", "joint_socket", "general_partnership", "limited_partnership", "foregin", "indivisual_establishment"));
-			$table->string("link");
-			$table->string("logo");
+			$table->enum("category", array("private_limited", "joint_socket", "general_partnership", "limited_partnership", "foregin", "indivisual_establishment"))->nullable();
+			$table->string("link")->nullable();
+			$table->string("logo")->nullable();
 			$table->timestamps();
 		});
 	}
@@ -30,7 +30,7 @@ class CreateJobCompaniesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("job_companies");
+		Schema::dropIfExists("job_companies");
 	}
 
 }

@@ -17,9 +17,9 @@ class CreateEventsTable extends Migration {
 			$table->string("title");
 			$table->datetime("start_datetime");
 			$table->datetime("finish_datetime");
-			$table->string("location");
-			$table->double("latitude");
-			$table->double("longtitude");
+			$table->string("location")->nullable();
+			$table->double("latitude")->nullable();
+			$table->double("longtitude")->nullable();
 			$table->bigInteger("created_by");
 			$table->timestamps();
 		});
@@ -33,7 +33,7 @@ class CreateEventsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("events");
+		Schema::dropIfExists("events");
 	}
 
 }

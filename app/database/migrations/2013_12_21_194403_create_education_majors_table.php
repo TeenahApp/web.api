@@ -27,7 +27,7 @@ class CreateEducationMajorsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("education_majors");
+		Schema::dropIfExists("education_majors");
 	}
 
 }

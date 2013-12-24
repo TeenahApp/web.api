@@ -14,7 +14,8 @@ class CreateMessagesTable extends Migration {
 		//
 		Schema::create("messages", function($table){
 			$table->bigIncrements("id");
-			$table->enum("category", array("text", "update")); // Update will accept HTML.
+			$table->enum("category", array("text", "update"))->default("text"); // Update will accept HTML.
+			$table->mediumtext("content");
 			$table->bigInteger("created_by");
 			$table->timestamps();
 		});
@@ -28,7 +29,7 @@ class CreateMessagesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("messages");
+		Schema::dropIfExists("messages");
 	}
 
 }

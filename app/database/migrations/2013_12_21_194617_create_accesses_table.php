@@ -28,7 +28,7 @@ class CreateAccessesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("accesses");
+		Schema::dropIfExists("accesses");
 	}
 
 }

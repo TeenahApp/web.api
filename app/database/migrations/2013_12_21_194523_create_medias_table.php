@@ -15,7 +15,7 @@ class CreateMediasTable extends Migration {
 		Schema::create("medias", function($table){
 			$table->bigIncrements("id");
 			$table->enum("category", array("image", "video", "sound"));
-			$table->string("taste"); // A thumb for an image, or a snippet of video/sound.
+			$table->string("taste")->nullable(); // A thumb for an image, or a snippet of video/sound.
 			$table->string("url");
 			$table->string("signature");
 			$table->bigInteger("created_by");
@@ -31,7 +31,7 @@ class CreateMediasTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("medias");
+		Schema::dropIfExists("medias");
 	}
 
 }

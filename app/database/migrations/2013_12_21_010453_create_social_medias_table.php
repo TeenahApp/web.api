@@ -28,7 +28,7 @@ class CreateSocialMediasTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("social_medias");
+		Schema::dropIfExists("social_medias");
 	}
 
 }

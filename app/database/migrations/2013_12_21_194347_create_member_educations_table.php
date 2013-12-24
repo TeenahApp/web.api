@@ -15,11 +15,11 @@ class CreateMemberEducationsTable extends Migration {
 		Schema::create("member_educations", function($table){
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
-			$table->enum("degree", array("none", "elementary", "intermediate", "secondary", "diploma", "licentiate", "bachelor", "master", "doctorate"));
+			$table->enum("degree", array("none", "elementary", "intermediate", "secondary", "diploma", "licentiate", "bachelor", "master", "doctorate"))->default("none");
 			$table->bigInteger("major_id");
-			$table->integer("start_year");
-			$table->integer("finish_year");
-			$table->enum("status", array("ongoing", "finished", "pending", "dropped"));
+			$table->integer("start_year")->nullable();
+			$table->integer("finish_year")->nullable();
+			$table->enum("status", array("ongoing", "finished", "pending", "dropped"))->default("ongoing");
 			$table->timestamps();
 		});
 	}
@@ -32,7 +32,7 @@ class CreateMemberEducationsTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("member_educations");
+		Schema::dropIfExists("member_educations");
 	}
 
 }

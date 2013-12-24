@@ -28,7 +28,7 @@ class CreateEventMediasTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("event_medias");
+		Schema::dropIfExists("event_medias");
 	}
 
 }

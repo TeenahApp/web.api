@@ -15,7 +15,7 @@ class CreateCirclesTable extends Migration {
 		Schema::create("circles", function($table){
 			$table->bigIncrements("id");
 			$table->string("name");
-			$table->integer("members_count");
+			$table->integer("members_count")->default(0);
 			$table->boolean("active")->default(1);
 			$table->bigInteger("created_by");
 			$table->timestamps();
@@ -30,7 +30,7 @@ class CreateCirclesTable extends Migration {
 	public function down()
 	{
 		//
-		Schema::drop("circles");
+		Schema::dropIfExists("circles");
 	}
 
 }
