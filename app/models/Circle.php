@@ -9,4 +9,9 @@ class Circle extends Eloquent {
 	{
 		return $this->belongsTo("Member", "created_by");
 	}
+
+	public function members()
+	{
+		return $this->hasManyThrough("Member", "MemberCircle");
+	}
 }

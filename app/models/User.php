@@ -8,4 +8,9 @@ class User extends Eloquent {
 	{
 		return $this->belongsTo("Member");
 	}
+
+	public function accesses()
+	{
+		return $this->hasMany("Access");
+	}
 }

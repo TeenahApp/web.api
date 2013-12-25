@@ -13,6 +13,6 @@
 
 Route::get('/', function()
 {
-	$users = User::all();
-	var_dump($users);
+	
 });
+

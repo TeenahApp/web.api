@@ -15,6 +15,7 @@ class CreateCircleMessageMembersTable extends Migration {
 		Schema::create("circle_message_members", function($table){
 			$table->bigIncrements("id");
 			$table->bigInteger("circle_id");
+			$table->bigInteger("message_id");
 			$table->bigInteger("member_id");
 			$table->enum("status", array("pending", "sent", "read"))->default("pending");
 			$table->timestamps();
