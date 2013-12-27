@@ -152,4 +152,19 @@ class UsersController extends \Controller {
 			"has_member" => $has_member
 		), 200);
 	}
+
+	public function logout()
+	{
+		$user_token = Request::header("X-User-Token");
+
+		// Get the logged in user.
+		$user = User::where("token", "=", $user_token)->first();
+
+		// Forget the token for the user that is logged in.
+		$user->token = null;
+		$user->save();
+
+		// Done.
+		return Response::json("", 204);
+	}
 }

@@ -20,4 +20,7 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Sign in using two factors; mobile and SMS token.
 	Route::post("users/login", "UsersController@login");
+
+	// Sign out for a logged in user.
+	Route::get("users/logout", array("before" => "user.auth", "uses" => "UsersController@logout"));
 });

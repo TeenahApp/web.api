@@ -78,3 +78,29 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter("user.auth", function(){
+
+	// Get the user token.
+	$user_token = Request::header("X-User-Token");
+
+	if (is_null($user_token))
+	{
+		return Response::json(array(
+			"message" => "Not authorized to access this resource."
+		), 403);
+	}
+
+	// Check if the token does exist in the users table.
+	$user = User::where("token", "=", $user_token)->first();
+	
+	if (is_null($user))
+	{
+		return Response::json(array(
+			"message" => "Not authorized to access this resource."
+		), 403);
+	}
+
+	// Otherwise, everything is fine and dandy.
+	// Call the desired controller.
+});
