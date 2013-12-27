@@ -11,8 +11,13 @@
 |
 */
 
-Route::get('/', function()
-{
-	
-});
+// Route::filter();
 
+Route::group(array("prefix" => "api/v1"), function()
+{
+	// Get the first factor to sign in.
+	Route::get("users/token/{mobile}", "UsersController@tokenize")->where("mobile", "[0-9]+");
+
+	// Sign in using two factors; mobile and SMS token.
+	Route::post("users/login", "UsersController@login");
+});

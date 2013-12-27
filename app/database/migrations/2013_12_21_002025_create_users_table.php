@@ -15,10 +15,11 @@ class CreateUsersTable extends Migration {
 		Schema::create("users", function($table){
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
-			$table->string("username")->unique();
-			$table->string("password");
-			$table->string("email")->unique()->nullable(); // Could it be?
+			$table->string("mobile")->unique();
+			$table->string("token");
+			$table->string("email")->unique()->nullable();
 			$table->boolean("active")->default(1);
+			$table->datetime("last_time_tokenized");
 			$table->timestamps();
 		});
 	}
