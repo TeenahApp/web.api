@@ -23,4 +23,7 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Sign out for a logged in user.
 	Route::get("users/logout", array("before" => "user.auth", "uses" => "UsersController@logout"));
+
+	// Initial login for the user, there must be a member related to.
+	Route::post("users/members", array("before" => "user.auth", "uses" => "UsersController@initialize"));
 });

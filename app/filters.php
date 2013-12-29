@@ -92,7 +92,7 @@ Route::filter("user.auth", function(){
 	}
 
 	// Check if the token does exist in the users table.
-	$user = User::where("token", "=", $user_token)->first();
+	$user = User::where("token", "=", $user_token)->where("active", "=", "1")->first();
 	
 	if (is_null($user))
 	{

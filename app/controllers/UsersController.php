@@ -155,10 +155,7 @@ class UsersController extends \Controller {
 
 	public function logout()
 	{
-		$user_token = Request::header("X-User-Token");
-
-		// Get the logged in user.
-		$user = User::where("token", "=", $user_token)->first();
+		$user = $this->current();
 
 		// Forget the token for the user that is logged in.
 		$user->token = null;
@@ -166,5 +163,56 @@ class UsersController extends \Controller {
 
 		// Done.
 		return Response::json("", 204);
+	}
+
+	public function initialize()
+	{
+		$user = $this->current();
+
+		// Get the inputs from the user.
+		$validator = Validator::make(
+			array(
+				"gender" => Input::get("gender"),
+				"name" => Input::get("name"),
+				"dob" => Input::get("dob")
+			),
+			array(
+				"gender" => "required|in:male,female",
+				"name" => "required",
+				"dob" => "required|date" // TODO: Consider this again.
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Invalid inputs."
+			), 400);
+		}
+
+		// TODO: Normalize the name.
+		// TODO: Detect relationships.
+		$name = $this->normalize(Input::get("name"));
+
+		if (is_null($name))
+		{
+			return Response::json(array(
+				"message" => "The entered name is not within the correct format."
+			), 400);
+		}
+
+		// Otherwise, everything is fine and dandy.
+
+	}
+
+	// This method to get the current logged in user.
+	public function current()
+	{
+		$user_token = Request::header("X-User-Token");
+
+		// Get the logged in user.
+		$user = User::where("token", "=", $user_token)->first();
+
+		return $user;
 	}
 }
