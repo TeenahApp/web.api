@@ -76,9 +76,4 @@ class MembersController extends \Controller {
 		//
 	}
 
-	private function normalize($string)
-	{
-		// TODO: Remove every non Arabic letters (chars).
-	}
-
 }

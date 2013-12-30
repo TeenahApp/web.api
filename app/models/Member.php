@@ -71,4 +71,19 @@ class Member extends Eloquent {
 	{
 		return $this->hasManyThrough("SocialMedia", "MemberSocialMedia");
 	}
+
+	// Normalize the name; by removing Harakat's, and Madd's.
+	public static function normalize($name)
+	{
+		// Remove every non Arabic letters (chars).
+		$name = preg_replace("/[^أاإآبتثجحخدذرزسشصضطظعغفقكلمنهوؤيئءىﻻﻵة ]/u", "", $name);
+
+		// Normalize [Abd].
+		$name = preg_replace("/عبد /", "عبد", $name);
+
+		// Null the name if empty.
+		$name = empty($name) ? null : $name;
+
+		return $name;
+	}
 }

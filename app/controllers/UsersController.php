@@ -169,6 +169,14 @@ class UsersController extends \Controller {
 	{
 		$user = $this->current();
 
+		// Check if the user already has a member.
+		if ($user->member_id != 0)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to access this resource."
+			), 403);
+		}
+
 		// Get the inputs from the user.
 		$validator = Validator::make(
 			array(
@@ -190,9 +198,8 @@ class UsersController extends \Controller {
 			), 400);
 		}
 
-		// TODO: Normalize the name.
-		// TODO: Detect relationships.
-		$name = $this->normalize(Input::get("name"));
+		// Normalize the name.
+		$name = Member::normalize(Input::get("name"));
 
 		if (is_null($name))
 		{
@@ -202,7 +209,22 @@ class UsersController extends \Controller {
 		}
 
 		// Otherwise, everything is fine and dandy.
+		$member = Member::create(array(
+			"gener" => Input::get("gender"),
+			"name" => $name,
+			"dob" => Input::get("dob")
+		));
 
+		// Update the user's member id.
+		$user->member_id = $member->id;
+		$user->save();
+
+		// Done.
+		return Response::json(array(
+			"message" => "Member has been created successfully.",
+			"member_id" => $member->id,
+			"user_id" => $user->id
+		), 201);
 	}
 
 	// This method to get the current logged in user.
