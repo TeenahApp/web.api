@@ -26,4 +26,7 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Initial login for the user, there must be a member related to.
 	Route::post("users/members", array("before" => "user.auth", "uses" => "UsersController@initialize"));
+
+	// Update the photo of a member.
+	Route::put("members/{member_id}/photos", array("before" => "user.auth", "uses" => "MembersController@uploadPhoto"))->where("member_id", "[0-9]+");
 });

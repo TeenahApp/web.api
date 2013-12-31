@@ -86,4 +86,11 @@ class Member extends Eloquent {
 
 		return $name;
 	}
+
+	// One of the main methods for the system to decide if the logged in member can use a resource for another/same member.
+	// TODO: Build this method to be real.
+	public static function canUseResource($member_a, $member_b)
+	{
+		return true;
+	}
 }

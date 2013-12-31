@@ -155,7 +155,7 @@ class UsersController extends \Controller {
 
 	public function logout()
 	{
-		$user = $this->current();
+		$user = User::current();
 
 		// Forget the token for the user that is logged in.
 		$user->token = null;
@@ -167,7 +167,7 @@ class UsersController extends \Controller {
 
 	public function initialize()
 	{
-		$user = $this->current();
+		$user = User::current();
 
 		// Check if the user already has a member.
 		if ($user->member_id != 0)
@@ -225,16 +225,5 @@ class UsersController extends \Controller {
 			"member_id" => $member->id,
 			"user_id" => $user->id
 		), 201);
-	}
-
-	// This method to get the current logged in user.
-	public function current()
-	{
-		$user_token = Request::header("X-User-Token");
-
-		// Get the logged in user.
-		$user = User::where("token", "=", $user_token)->first();
-
-		return $user;
 	}
 }
