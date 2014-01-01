@@ -144,7 +144,10 @@ class UsersController extends \Controller {
 		}
 
 		// Save the access of the user.
-		Access::create(array("user_id" => $user->id, "category" => "login"));
+		Access::create(array(
+			"user_id" => $user->id,
+			"category" => "login"
+		));
 
 		// TODO: Return dashboard if the user has a member.
 		return Response::json(array(
@@ -212,7 +215,8 @@ class UsersController extends \Controller {
 		$member = Member::create(array(
 			"gener" => Input::get("gender"),
 			"name" => $name,
-			"dob" => Input::get("dob")
+			"dob" => Input::get("dob"),
+			"mobile" => $user->mobile
 		));
 
 		// Update the user's member id.

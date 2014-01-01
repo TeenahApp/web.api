@@ -29,4 +29,7 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Update the photo of a member.
 	Route::put("members/{member_id}/photos", array("before" => "user.auth", "uses" => "MembersController@uploadPhoto"))->where("member_id", "[0-9]+");
+
+	// Create a relationship between two members.
+	Route::post("members/{member_a}/relations", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+", "member_b" => "[0-9]+"));
 });
