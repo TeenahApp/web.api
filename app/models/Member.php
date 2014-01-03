@@ -3,8 +3,10 @@
 class Member extends Eloquent {
 
 	protected $table = "members";
-	protected $fillable = array("gender", "name", "dob", "is_alive");
-	protected $hidden = array("mobile", "email", "home_phone", "work_phone", "marital_status", "blood_type");
+	protected $guarded = array();
+	
+	//protected $fillable = array("gender", "name", "dob", "is_alive");
+	//protected $hidden = array("mobile", "email", "home_phone", "work_phone", "marital_status", "blood_type");
 
 	public function user()
 	{
@@ -86,6 +88,9 @@ class Member extends Eloquent {
 
 		return $name;
 	}
+
+	// TODO:	There should be an override method for create().
+	//			It fills the fullname of a member by moving up to fathers of.
 
 	// One of the main methods for the system to decide if the logged in member can use a resource for another/same member.
 	// TODO: Build this method to be real.

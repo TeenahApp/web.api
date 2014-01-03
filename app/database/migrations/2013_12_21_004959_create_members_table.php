@@ -26,7 +26,7 @@ class CreateMembersTable extends Migration {
 			$table->boolean("is_alive")->default(1);
 			$table->string("photo")->nullable();
 			$table->string("location")->nullable();
-			$table->string("mobile");
+			$table->string("mobile")->nullable();
 			$table->string("email")->nullable();
 			$table->string("home_phone")->nullable();
 			$table->string("work_phone")->nullable();

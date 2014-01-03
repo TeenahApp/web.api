@@ -11,6 +11,12 @@
 |
 */
 
+/*
+Event::listen("illuminate.query", function($sql){
+	echo $sql;
+});
+*/
+
 // Route::filter();
 
 Route::group(array("prefix" => "api/v1"), function()

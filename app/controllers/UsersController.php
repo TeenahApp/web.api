@@ -213,7 +213,7 @@ class UsersController extends \Controller {
 
 		// Otherwise, everything is fine and dandy.
 		$member = Member::create(array(
-			"gener" => Input::get("gender"),
+			"gender" => Input::get("gender"),
 			"name" => $name,
 			"dob" => Input::get("dob"),
 			"mobile" => $user->mobile

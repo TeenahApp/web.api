@@ -29,11 +29,92 @@ class MemberRelationsController extends \Controller {
 	 */
 	public function store($member_a)
 	{
-		// TODO: Check if the (logged in) member can add a relation to this member.
-		// TODO: Check if the member that is chosen does exist.
-		// REQUEST: is_alive, name, mobile, dob.
-		
-		echo $member_a;
+		// Get the first member to relate from.
+		$member_a = Member::where("id", "=", $member_a)->first();
+
+		if (is_null($member_a))
+		{
+			return Response::json(array(
+				"message" => "The member that is chosen cannot be found."
+			), 404);
+		}
+
+		// Get the correct relationships for the first member.
+		$correct_relations = implode(",", MemberRelation::correctGenderRelations($member_a->gender));
+
+		// Check if the (logged in) member is able to upload a photo for the chosen member.
+		$logged_in_user = User::current();
+
+		if (!Member::canUseResource($logged_in_user->member_id, $member_a->id))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to access this resource."
+			), 403);
+		}
+
+		$validator = Validator::make(
+			array(
+				"is_alive" => Input::get("is_alive"),
+				"name" => Input::get("name"),
+				"dob" => Input::get("dob"),
+				"mobile" => Input::get("mobile"),
+				"relation" => Input::get("relation"),
+			),
+			array(
+				"is_alive" => "required|in:0,1",
+				"name" => "required",
+				"dob" => "date",
+				"mobile" => "numeric",
+				"relation" => "required|in:$correct_relations" // TODO: Specify only correct relations.
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		$name = Member::normalize(Input::get("name"));
+		$mobile = Input::get("mobile");
+
+		if (is_null($name))
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		$member_b = null;
+
+		// Find the member (B), or create.
+		if (!empty($mobile))
+		{
+			// Search for a member with the specified mobile.
+			$member_b = Member::where("mobile", "=", $mobile)->first();
+		}
+
+		if (is_null($member_b))
+		{
+			$member_b = Member::create(
+				array(
+					"is_alive" => Input::get("is_alive"),
+					"name" => $name,
+					"dob" => Input::get("dob"),
+					"mobile" => $mobile
+				)
+			);
+		}
+
+		// Make a relationship between two members.
+		$result = MemberRelation::make($member_a, $member_b, Input::get("relation"));
+
+		return Response::json(array(
+			"message" => "Relationship has been created successfully.",
+			"a-to-b" => $result["a-to-b"],
+			"b-to-a" => $result["b-to-a"]
+		), 201);
 	}
 
 	/**

@@ -21,14 +21,10 @@ class UserTableSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table("users")->delete();
-
-		DB::table("users")->insert(
+		User::create(
 			array(
 				"member_id" => 1,
-				"username" => "966",
-				"password" => Hash::make("123"),
-				"created_at" => new DateTime()
+				"mobile" => "966"
 			)
 		);
 	}
@@ -38,13 +34,11 @@ class MemberTableSeeder extends Seeder {
 
 	public function run()
 	{
-		DB::table("members")->delete();
-
-		DB::table("members")->insert(
+		Member::create(
 			array(
 				"id" => 1,
 				"name" => "TeenahApp",
-				"created_at" => new DateTime()
+				"mobile" => "966"
 			)
 		);
 	}
