@@ -130,18 +130,22 @@ class UsersController extends \Controller {
 		// Update the user token in the database.
 		$user->token = $user_token;
 		$user->last_time_tokenized = new DateTime();
-		$user->save();
 
 		// Remove the generated SMS token.
 		Session::forget("sms_token");
 
 		// Initially, the user has no member related to.
 		$has_member = false;
+		$found_member = Member::where("mobile", "=", Input::get("mobile"))->first();
 
-		if ($user->member_id != 0)
+		if (!is_null($found_member))
 		{
 			$has_member = true;
+			$user->member_id = $found_member->id;
 		}
+
+		// Save changes.
+		$user->save();
 
 		// Save the access of the user.
 		Access::create(array(

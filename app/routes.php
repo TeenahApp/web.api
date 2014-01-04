@@ -38,4 +38,13 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Create a relationship between two members.
 	Route::post("members/{member_a}/relations", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+", "member_b" => "[0-9]+"));
+
+	// Create an education for a member.
+	Route::post("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("member_id", "[0-9]+");
+
+	// Get the educations for a member.
+	Route::get("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@index"))->where("id", "[0-9]+");
+
+	// Get circles of a member.
+	Route::get("members/{id}/circles", array("before" => "user.auth", "uses" => "MemberCirclesController@show"));
 });

@@ -16,7 +16,7 @@ class CreateMemberEducationsTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
 			$table->enum("degree", array("none", "elementary", "intermediate", "secondary", "diploma", "licentiate", "bachelor", "master", "doctorate"))->default("none");
-			$table->bigInteger("major_id");
+			$table->bigInteger("major_id")->nullable();;
 			$table->integer("start_year")->nullable();
 			$table->integer("finish_year")->nullable();
 			$table->enum("status", array("ongoing", "finished", "pending", "dropped"))->default("ongoing");

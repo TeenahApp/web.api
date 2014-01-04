@@ -105,6 +105,8 @@ class MemberRelationsController extends \Controller {
 					"mobile" => $mobile
 				)
 			);
+
+			// TODO: Send SMS asking new member to download app.
 		}
 
 		// Make a relationship between two members.

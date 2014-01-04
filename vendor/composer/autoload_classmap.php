@@ -44,6 +44,7 @@ return array(
     'Member' => $baseDir . '/app/models/Member.php',
     'MemberCircle' => $baseDir . '/app/models/MemberCircle.php',
     'MemberEducation' => $baseDir . '/app/models/MemberEducation.php',
+    'MemberEducationsController' => $baseDir . '/app/controllers/MemberEducationsController.php',
     'MemberJob' => $baseDir . '/app/models/MemberJob.php',
     'MemberPrivacy' => $baseDir . '/app/models/MemberPrivacy.php',
     'MemberRelation' => $baseDir . '/app/models/MemberRelation.php',

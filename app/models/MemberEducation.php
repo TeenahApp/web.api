@@ -3,7 +3,7 @@
 class MemberEducation extends Eloquent {
 
 	protected $table = "member_educations";
-	protected $fillable = array("member_id", "degree", "major_id");
+	protected $guarded = array();
 
 	public function member()
 	{
