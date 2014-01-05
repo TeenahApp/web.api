@@ -3,7 +3,7 @@
 class Access extends Eloquent {
 
 	protected $table = "accesses";
-	protected $fillable = array("user_id", "category");
+	protected $guarded = array();
 
 	public function user()
 	{

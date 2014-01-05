@@ -3,6 +3,5 @@
 class JobCompany extends Eloquent {
 
 	protected $table = "job_companies";
-	protected $fillable = array("name", "category");
-	protected $hidden = array("category");
+	protected $guarded = array();
 }

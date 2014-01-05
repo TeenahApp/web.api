@@ -1,6 +1,6 @@
 <?php
 
-class MemberEducationsController extends \Controller {
+class MemberJobsController extends \Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -28,8 +28,8 @@ class MemberEducationsController extends \Controller {
 			), 403);
 		}
 
-		// List all educations for a member.
-		return MemberEducation::with("major")->where("member_id", "=", $id)->get();
+		// List all jobs for a member.
+		return MemberJob::with("company")->where("member_id", "=", $id)->get();
 	}
 
 	/**
@@ -49,24 +49,36 @@ class MemberEducationsController extends \Controller {
 	 */
 	public function store($id)
 	{
+		// Check if the id does exist.
+		$member = Member::where("id", "=", $id)->first();
+
+		if (is_null($member))
+		{
+			return Response::json(array(
+				"message" => "The chosen member has not been found."
+			), 404);
+		}
+
 		$user = User::current();
 
-		if (!Member::canUseResource($user->member_id, $id))
+		if (!Member::canUseResource($user->member_id, $member->id))
 		{
 			return Response::json(array(
 				"message" => "Not authroized to use this resource."
 			), 403);
 		}
 
+		// title, company, start_year, finish_year, status
+
 		$validator = Validator::make(
 			array(
-				"degree" => Input::get("degree"),
+				"title" => Input::get("title"),
 				"start_year" => Input::get("start_year"),
 				"finish_year" => Input::get("finish_year"),
 				"status" => Input::get("status")
 			),
 			array(
-				"degree" => "required|in:none,elementary,intermediate,secondary,diploma,licentiate,bachelor,master,doctorate",
+				"title" => "required",
 				"start_year" => "numeric",
 				"finish_year" => "numeric",
 				"status" => "in:ongoing,finished,pending,dropped"
@@ -80,28 +92,28 @@ class MemberEducationsController extends \Controller {
 			), 400);
 		}
 
-		$major = Input::get("major");
+		$company = Input::get("company");
 		$finish_year = Input::get("finish_year");
 
-		// Check if the major is not empty.
-		if (!empty($major))
+		// Check if the company is not empty.
+		if (!empty($company))
 		{
-			$found_major = EducationMajor::where("name", "=", $major)->first();
+			$found_company = JobCompany::where("name", "=", $company)->first();
 
-			if (is_null($found_major))
+			if (is_null($found_company))
 			{
-				// Create a major.
-				$found_major = EducationMajor::create(array("name" => $major));
-				$major_id = $found_major->id;
+				// Create a company.
+				$found_company = JobCompany::create(array("name" => $company));
+				$company_id = $found_company->id;
 			}
 			else
 			{
-				$major_id = $found_major->id;
+				$company_id = $found_company->id;
 			}
 		}
 		else
 		{
-			$major_id = null;
+			$company_id = null;
 		}
 
 		// If finish year is there, then status is finished.
@@ -112,12 +124,12 @@ class MemberEducationsController extends \Controller {
 			$status = "finished";
 		}
 
-		// TODO: Should check if the education already exists.
-		$education = MemberEducation::create(
+		// TODO: Should check if the job already exists.
+		$job = MemberJob::create(
 			array(
 				"member_id" => $id,
-				"degree" => Input::get("degree"),
-				"major_id" => $major_id,
+				"title" => Input::get("title"),
+				"company_id" => $company_id,
 				"start_year" => Input::get("start_year"),
 				"finish_year" => $finish_year,
 				"status" => $status
@@ -126,12 +138,12 @@ class MemberEducationsController extends \Controller {
 
 		// Done.
 		return Response::json(array(
-			"message" => "The education has been created.",
-			"degree" => $education->degree,
-			"major_id" => $major_id,
-			"start_year" => $education->start_year,
-			"finish_year" => $education->finish_year,
-			"status" => $education->status
+			"message" => "The job has been created.",
+			"title" => $job->title,
+			"company_id" => $company_id,
+			"start_year" => $job->start_year,
+			"finish_year" => $job->finish_year,
+			"status" => $job->status
 		), 201);
 	}
 

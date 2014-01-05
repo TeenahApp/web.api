@@ -3,7 +3,7 @@
 class Action extends Eloquent {
 
 	protected $table = "actions";
-	protected $fillable = array("area", "action", "affected_member_id", "created_by");
+	protected $guarded = array();
 
 	public function creator()
 	{

@@ -3,6 +3,7 @@
 class CircleMessageMemeber extends Eloquent {
 
 	protected $table = "circle_message_members";
+	protected $guarded = array();
 
 	public function circle()
 	{

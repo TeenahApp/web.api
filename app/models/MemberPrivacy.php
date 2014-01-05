@@ -3,7 +3,7 @@
 class MemberPrivacy extends Eloquent {
 
 	protected $table = "member_privacies";
-	protected $fillable = array("member_id", "privacy_id");
+	protected $guarded = array();
 
 	public function member()
 	{

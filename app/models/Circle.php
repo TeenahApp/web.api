@@ -3,7 +3,7 @@
 class Circle extends Eloquent {
 
 	protected $table = "circles";
-	protected $fillable = array("name", "active");
+	protected $guarded = array();
 
 	public function creator()
 	{

@@ -3,8 +3,7 @@
 class Event extends Eloquent {
 
 	protected $table = "events";
-	protected $fillable = array("title", "start_datetime", "finish_datetime", "location", "created_by");
-	protected $hidden = array("latitude", "longtitude");
+	protected $guarded = array();
 
 	public function creator()
 	{

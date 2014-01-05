@@ -16,7 +16,7 @@ class CreateMemberJobsTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
 			$table->string("title");
-			$table->bigInteger("company_id");
+			$table->bigInteger("company_id")->nullable();
 			$table->integer("start_year")->nullable();
 			$table->integer("finish_year")->nullable();
 			$table->enum("status", array("ongoing", "finished", "pending", "dropped"))->default("ongoing");

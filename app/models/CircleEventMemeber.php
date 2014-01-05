@@ -3,7 +3,7 @@
 class CircleEventMemeber extends Eloquent {
 
 	protected $table = "circle_event_members";
-	protected $fillable = array("circle_id", "event_id", "member_id");
+	protected $guarded = array();
 
 	public function circle()
 	{

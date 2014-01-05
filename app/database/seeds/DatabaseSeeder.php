@@ -43,3 +43,6 @@ class MemberTableSeeder extends Seeder {
 		);
 	}
 }
+
+// TODO: Insert all majors we know.
+// TODO: Insert companies we know.

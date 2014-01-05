@@ -3,7 +3,7 @@
 class EventMedia extends Eloquent {
 
 	protected $table = "event_medias";
-	protected $fillable = array("event_id", "media_id");
+	protected $guarded = array();
 
 	public function event()
 	{

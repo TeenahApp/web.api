@@ -45,6 +45,12 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get the educations for a member.
 	Route::get("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@index"))->where("id", "[0-9]+");
 
+	// Create a job for a member.
+	Route::post("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@store"))->where("id", "[0-9]+");
+
+	// Get the jobs for a member.
+	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");;
+
 	// Get circles of a member.
 	Route::get("members/{id}/circles", array("before" => "user.auth", "uses" => "MemberCirclesController@show"));
 });
