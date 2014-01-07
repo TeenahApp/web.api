@@ -13,7 +13,7 @@
 
 /*
 Event::listen("illuminate.query", function($sql){
-	echo $sql;
+	echo "$sql\n";
 });
 */
 
@@ -49,8 +49,16 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::post("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@store"))->where("id", "[0-9]+");
 
 	// Get the jobs for a member.
-	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");;
+	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");
+
+	// Add a member to a circle.
+	// TODO: The logged in user must be in the circle to add members.
+	Route::post("cirlces/{id}/members", array("before" => "user.auth", "uses" => "MemberCirclesController@store"))->where("id", "[0-9]+");
 
 	// Get circles of a member.
-	Route::get("members/{id}/circles", array("before" => "user.auth", "uses" => "MemberCirclesController@show"));
+	Route::get("circles", array("before" => "user.auth", "uses" => "CirclesController@index"));
+
+	// Create a circle; must invite at least one member.
+	Route::post("circles", array("before" => "user.auth", "uses" => "CirclesController@store"));
+
 });

@@ -12,7 +12,13 @@ class Member extends Eloquent {
 
 	public function circles()
 	{
-		return $this->hasManyThrough("Member", "MemberCircle");
+		// Set the member right.
+		$member_id = $this->id;
+
+		return DB::table("circles")->select("circles.*")->join("member_circles", function($join) use ($member_id){
+			$join->on("circles.id", "=", "member_circles.circle_id")
+				->where("member_id", "=", $member_id);
+		});
 	}
 
 	public function createdActions()
@@ -57,13 +63,13 @@ class Member extends Eloquent {
 	// TODO: Find a fine name.
 	public function outRelations()
 	{
-		return $this->hasManyThrough("Member", "MemberRelation", "member_a");
+		return $this->hasMany( "MemberRelation", "member_a");
 	}
 
 	// TODO: Find a comprehensive name.
 	public function inRelations()
 	{
-		return $this->hasManyThrough("Member", "MemberRelation", "member_b");
+		return $this->hasMany("MemberRelation", "member_b");
 	}
 
 	public function socialMedias()
