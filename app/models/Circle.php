@@ -12,6 +12,12 @@ class Circle extends Eloquent {
 
 	public function members()
 	{
-		return $this->hasManyThrough("Member", "MemberCircle");
+		// Set the circle right.
+		$circle_id = $this->id;
+
+		return DB::table("members")->select("members.*")->join("member_circles", function($join) use ($circle_id){
+			$join->on("members.id", "=", "member_circles.member_id")
+				->where("circle_id", "=", $circle_id);
+		});
 	}
 }

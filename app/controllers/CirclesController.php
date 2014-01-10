@@ -70,7 +70,7 @@ class CirclesController extends \Controller {
 		}
 
 		// Get the circles for a member.
-		$circles = $user->member->circles()->get();
+		$circles = $user->member->circles()->where("status", "=", "active")->get();
 
 		// Done.
 		return Response::json($circles, 200);

@@ -51,9 +51,11 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get the jobs for a member.
 	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");
 
+	// Get the members of a circle.
+	Route::get("circles/{id}/members", array("before" => "user.auth", "uses" => "MemberCirclesController@index"))->where("id", "[0-9]+");
+
 	// Add a member to a circle.
-	// TODO: The logged in user must be in the circle to add members.
-	Route::post("cirlces/{id}/members", array("before" => "user.auth", "uses" => "MemberCirclesController@store"))->where("id", "[0-9]+");
+	Route::post("circles/{id}/members", array("before" => "user.auth", "uses" => "MemberCirclesController@store"))->where("id", "[0-9]+");
 
 	// Get circles of a member.
 	Route::get("circles", array("before" => "user.auth", "uses" => "CirclesController@index"));
@@ -61,4 +63,16 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Create a circle; must invite at least one member.
 	Route::post("circles", array("before" => "user.auth", "uses" => "CirclesController@store"));
 
+	// TODO: Modify and Delete a circle.
+	Route::get("circles/{id}/leave", array("before" => "user.auth", "uses" => "MemberCirclesController@leave"));
+
+	// Create an event.
+	Route::post("events", array("before" => "user.auth", "uses" => "EventsController@store"));
+
+	// Get an event.
+	Route::get("events/{id}", array("before" => "user.auth", "uses" => "EventsController@show"));
+
+	// TODO:
+	Route::put("events/{id}", array("before" => "user.auth", "uses" => "EventsController@update"));
+	Route::delete("events/{id}", array("before" => "user.auth", "uses" => "EventsController@destroy"))
 });
