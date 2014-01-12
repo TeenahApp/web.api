@@ -72,7 +72,10 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get an event.
 	Route::get("events/{id}", array("before" => "user.auth", "uses" => "EventsController@show"));
 
-	// TODO:
+	// TODO: 
 	Route::put("events/{id}", array("before" => "user.auth", "uses" => "EventsController@update"));
-	Route::delete("events/{id}", array("before" => "user.auth", "uses" => "EventsController@destroy"))
+	Route::delete("events/{id}", array("before" => "user.auth", "uses" => "EventsController@destroy"));
+	Route::put("events/{id}/decision/{decision}", array("before" => "user.auth", "uses" => "EventsController@decide"));
+	Route::get("events/{id}/decision", array("before" => "user.auth", "uses" => "EventsController@showDecision"));
+
 });

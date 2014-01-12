@@ -59,6 +59,7 @@ class MemberRelationsController extends \Controller {
 				"dob" => Input::get("dob"),
 				"mobile" => Input::get("mobile"),
 				"relation" => Input::get("relation"),
+				"is_root" => Input::get("is_root")
 			),
 			array(
 				"is_alive" => "required|in:0,1",
@@ -66,6 +67,7 @@ class MemberRelationsController extends \Controller {
 				"dob" => "date",
 				"mobile" => "numeric",
 				"relation" => "required|in:$correct_relations" // TODO: Specify only correct relations.
+				"is_root" => "required|in:0,1"
 			)
 		);
 
@@ -107,6 +109,12 @@ class MemberRelationsController extends \Controller {
 			);
 
 			// TODO: Send SMS asking new member to download app.
+		}
+
+		// TODO: Check if the related member is a root.
+		if (Input::get("is_root") == 1)
+		{
+			// TODO: Please fix this.
 		}
 
 		// Make a relationship between two members.

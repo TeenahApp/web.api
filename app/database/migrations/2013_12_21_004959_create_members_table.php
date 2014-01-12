@@ -32,6 +32,8 @@ class CreateMembersTable extends Migration {
 			$table->string("work_phone")->nullable();
 			$table->enum("marital_status", array("single", "married", "divorced", "widow"))->default("single");
 			$table->string("blood_type")->nullable();
+			$table->boolean("is_root")->default(0);
+			$table->bigInteger("tribe_id")->nullable();
 			$table->timestamps();
 		});
 	}

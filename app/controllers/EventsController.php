@@ -204,6 +204,111 @@ class EventsController extends \Controller {
 	public function destroy($id)
 	{
 		//
+		$user = User::current();
+
+		// Check if the event does exist.
+		$event = TEvent::find($id);
+
+		if (is_null($event))
+		{
+			return Response::json(array(
+				"message" => "The event is not found."
+			), 404);
+		}
+
+		// Check if the logged in user (member) is the creator of the event.
+		if ($event->created_by != $user->member_id)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Everything is fine and dandy.
+		// TODO: Delete every related row to $event.
+		$event->delete();
+
+		return Response::json("", 204);
+	}
+
+	public function decide($id, $decision)
+	{
+		// TODO: Make a decision for the member about the event.
+		$user = User::current();
+
+		$validator = Validator::make(
+			array(
+				"id" => $id,
+				"decision" => $decision
+			),
+			array(
+				"id" => "required|numeric",
+				"decision" => "required|in:willcome,apologize"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Check if the member is invited.
+		$invitation_found = CircleEventMember::where("event_id", "=", $id)->where("member_id", "=", $user->member_id)->where("decision", "=", "notyet")->first();
+
+		if (is_null($invitation_found))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// TODO: Check if the event is out-dated.
+		// Make the decision.
+		$invitation_found->update(array(
+			"decision" => $decision
+		));
+
+		// Done.
+		return Response::json("", 204);
+	}
+
+	public function showDecision($id)
+	{
+		// TODO: Make a decision for the member about the event.
+		$user = User::current();
+
+		$validator = Validator::make(
+			array(
+				"id" => $id,
+			),
+			array(
+				"id" => "required|numeric",
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Check if the member is invited.
+		$invitation_found = CircleEventMember::where("event_id", "=", $id)->where("member_id", "=", $user->member_id)->first();
+
+		if (is_null($invitation_found))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Done.
+		return Response::json(array(
+			"decision" => $invitation_found->decision
+		), 200);
 	}
 
 }
