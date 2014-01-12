@@ -78,4 +78,5 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::put("events/{id}/decision/{decision}", array("before" => "user.auth", "uses" => "EventsController@decide"));
 	Route::get("events/{id}/decision", array("before" => "user.auth", "uses" => "EventsController@showDecision"));
 
+	Route::post("actions/{area}/{id}/{action}", array("before" => "user.auth", "uses" => "ActionsController@store"));
 });

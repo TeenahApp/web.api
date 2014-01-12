@@ -29,13 +29,39 @@ class ActionsController extends \Controller {
 			), 400);
 		}
 
-		// Check if the action has been added before.
-		$oneaction = Action::where();
+		// Remove the (s) from area.
+		$area = substr($area, 0, -1);
+		$oneaction = null;
+
+		if (in_array($action, array("like", "flag")))
+		{
+			// Check if the action has been added before.
+			$oneaction = Action::where("area", "=", $area)->where("action", "=", $action)->where("affected_id", "=", $affected_id)->first();
+		}
+
+		if (!is_null($oneaction))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Create it.
+		$oneaction = Action::create(array(
+			"area" => $area,
+			"action" => $action,
+			"affected_id" => $affected_id,
+			"content" => Input::get("content"),
+			"created_by" => $user->member_id
+		));
+
+		// Done.
+		return Response::json("", 204);
 	}
 
 	public function show($area, $affected_id, $action)
 	{
-
+		
 	}
 
 	public function destroy($area, $affected_id, $action)
