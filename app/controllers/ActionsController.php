@@ -2,26 +2,34 @@
 
 class ActionsController extends \Controller {
 
-	//actions/{area}/{id}/{action}
-
-	public function store($area, $affected_id, $action)
+	// Like an event.
+	public function likeEvent($id)
 	{
-		// Get the user that is logged in.
-		$user = User::current();
+		$result = Action::like("event", $id);
 
+		if ($result == false)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		return Response::json("", 204);
+	}
+
+	// Comment on an event.
+	public function commentEvent($id)
+	{
 		$validator = Validator::make(
 			array(
-				"area" => $area,
-				"affected_id" => $affected_id,
-				"action" => $action
+				"comment" => Input::get("comment")
 			),
 			array(
-				"area" => "required|in:members,events,media,member_comments,event_comments,media_comments",
-				"affected_id" => "required|numeric",
-				"action" => "in:view,comment,like,flag"
+				"comment" => "required"
 			)
 		);
 
+		// Check if the validation fails.
 		if ($validator->fails())
 		{
 			return Response::json(array(
@@ -29,43 +37,15 @@ class ActionsController extends \Controller {
 			), 400);
 		}
 
-		// Remove the (s) from area.
-		$area = substr($area, 0, -1);
-		$oneaction = null;
+		$result = Action::comment("event", $id, Input::get("comment"));
 
-		if (in_array($action, array("like", "flag")))
-		{
-			// Check if the action has been added before.
-			$oneaction = Action::where("area", "=", $area)->where("action", "=", $action)->where("affected_id", "=", $affected_id)->first();
-		}
-
-		if (!is_null($oneaction))
+		if ($result == false)
 		{
 			return Response::json(array(
 				"message" => "Not authorized to use this resource."
 			), 403);
 		}
 
-		// Create it.
-		$oneaction = Action::create(array(
-			"area" => $area,
-			"action" => $action,
-			"affected_id" => $affected_id,
-			"content" => Input::get("content"),
-			"created_by" => $user->member_id
-		));
-
-		// Done.
 		return Response::json("", 204);
-	}
-
-	public function show($area, $affected_id, $action)
-	{
-		
-	}
-
-	public function destroy($area, $affected_id, $action)
-	{
-
 	}
 }

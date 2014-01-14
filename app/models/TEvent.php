@@ -20,7 +20,8 @@ class TEvent extends Eloquent {
 		// Delete every invitation.
 		CircleEventMember::where("event_id", "=", $this->id)->delete();
 
-		// TODO: Delete every action.
+		// Delete every action.
+		Action::where("area", "=", "event")->where("affected_id", "=", $this->id)->delete();
 
 		// Delete the event.
 		return parent::delete();

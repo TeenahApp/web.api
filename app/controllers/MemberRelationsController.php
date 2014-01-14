@@ -25,6 +25,7 @@ class MemberRelationsController extends \Controller {
 	/**
 	 * Store a newly created resource in storage.
 	 *
+	 * TODO: Check if the related member has the same mobile number as a test.
 	 * @return Response
 	 */
 	public function store($member_a)
@@ -66,7 +67,7 @@ class MemberRelationsController extends \Controller {
 				"name" => "required",
 				"dob" => "date",
 				"mobile" => "numeric",
-				"relation" => "required|in:$correct_relations" // TODO: Specify only correct relations.
+				"relation" => "required|in:$correct_relations", // TODO: Specify only correct relations.
 				"is_root" => "required|in:0,1"
 			)
 		);

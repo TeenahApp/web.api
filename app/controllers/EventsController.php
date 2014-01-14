@@ -154,6 +154,12 @@ class EventsController extends \Controller {
 		//$cem_circles = CircleEventMember::where("event_id", "=", $event->id)->whereIn("circle_id", $member_circles)->groupBy("circle_id")->with("circle")->get();//, "circle");
 		//dd($cem_circles);
 
+		// Make an action for the logged in user (member); specifically "view".
+		Action::viewEvent($event->id);
+
+		// TODO: Get the decisions.
+		// TODO: Get the likes, and comments.
+
 		// TODO: Fill the circles.
 		return Response::json(array(
 				"id" => $event->id,

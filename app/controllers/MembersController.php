@@ -170,15 +170,15 @@ class MembersController extends \Controller {
 				"message" => "Not authorized to access this resource."
 			), 403);
 		}
-
-		// TODO: Scan the base64 photo using a different process.
 		
 		$validator = Validator::make(
 			array(
-				"photo" => Input::get("photo")
+				"data" => Input::get("data"),
+				"extension" => Input::get("extension"),
 			),
 			array(
-				"photo" => "required"
+				"data" => "required",
+				"extension" => "required"
 			)
 		);
 
@@ -189,28 +189,17 @@ class MembersController extends \Controller {
 			), 400);
 		}
 
-		// TODO: Save this file in S3 rather than saving it in here.
-
-		// Set the file fullname.
-		$output_filename = "uploads/" . str_random(40) . ".png";
-		$output_full_filename = public_path() . "/" . $output_filename;
-
-		// Save the decoded base64 of the file (image).
-		$file_saving = File::put($output_full_filename, base64_decode(Input::get("photo")));
-
-		if ($file_saving == 0)
+		$media = Media::upload("image", Input::get("data"), Input::get("extension"));
+		
+		if (is_null($media))
 		{
 			return Response::json(array(
-				"message" => "Photo has not been uploaded."
+				"message" => "Bad request."
 			), 400);
 		}
 
-		// Set the photo with the url.
-		// TODO: URL should be under https protocol.
-		$photo_url = asset($output_filename);
-
 		// Update the photo for the member that is chosen.
-		$member->photo = $photo_url;
+		$member->photo = $media->url;
 		$member->save();
 
 		// Done.
