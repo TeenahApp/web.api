@@ -12,7 +12,12 @@ class TEvent extends Eloquent {
 
 	public function members()
 	{
-		return $this->hasMany("CircleEventMember", "event_id");
+		return $this->hasMany("CircleEventMember", "event_id")->with("member");
+	}
+
+	public function medias()
+	{
+		return $this->hasMany("EventMedia", "event_id")->with("media");
 	}
 
 	public function delete()

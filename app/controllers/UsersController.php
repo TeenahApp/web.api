@@ -46,7 +46,7 @@ class UsersController extends \Controller {
 		//
 	}
 
-
+	// TODO: Do not login in a user that already logged in.
 	public function tokenize($mobile)
 	{
 		// Check if the user has already got SMS token.

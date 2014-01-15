@@ -4,6 +4,7 @@ class Media extends Eloquent {
 
 	protected $table = "medias";
 	protected $guarded = array();
+	protected $hidden = array("signature");
 
 	public function creator()
 	{

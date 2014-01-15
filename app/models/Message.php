@@ -10,37 +10,13 @@ class Message extends Eloquent {
 		return $this->belongsTo("Member", "created_by");
 	}
 
-	// category, content, circles, created_by
-	// Returns either true or false.
-	/*
-	public static function send($category, $content, $circles, $media = null)
+	public function medias()
 	{
-		// Get the logged in user.
-		$user = User::current();
-
-		$validator = Validator::make(
-			array(
-				"category" => $category,
-				"content" => $content,
-			),
-			array(
-				"category" => "required|in:text,update",
-				"content" => "size:500" // TODO: This should be in config file.
-			)
-		);
-
-		// Check if the validation fails.
-		if ($validator->fails())
-		{
-			return false;
-		}
-
-		// TODO: Check if the member is a member of all entered circles.
-		$member_circles = MemberCircle::where("member_id", "=", $user->member_id)->whereIn("circle_id", $circles)->count();
+		return $this->hasMany("MessageMedia")->with("media");
 	}
-	*/
 
 	// Usually used internally (not called by public).
+	// Returns an object of the message or null.
 	public static function sendText($content, $circles)
 	{
 		// Get the user information.
@@ -53,8 +29,14 @@ class Message extends Eloquent {
 			"created_by" => $user->member_id
 		));
 
-		// Distribute the message to the circles.
-		self::distribute($message->id, $circles);
+		// deliver the message to the members of circles.
+		$status = self::broadcast($message->id, $circles);
+
+		if ($status == false)
+		{
+			// TODO: May be delete the message.
+			return null;
+		}
 
 		return $message;
 	}
@@ -62,17 +44,50 @@ class Message extends Eloquent {
 	// Send an update.
 	public static function sendUpdate($content, $circles)
 	{
-		//
+		// TODO:
 	}
 
 	// Upload and send a media as a message.
 	public static function sendMedia($category, $data, $extension, $circles)
 	{
-		//
+		// Get the user information.
+		$user = User::current();
+
+		// Create a new message.
+		$message = self::create(array(
+			"category" => "text",
+			"created_by" => $user->member_id
+		));
+
+		// Try to upload the media.
+		$media = Media::upload($category, $data, $extension);
+
+		if (is_null($media))
+		{
+			return null;
+		}
+
+		// Add the media to the message.
+		MessageMedia::create(array(
+			"message_id" => $message->id,
+			"media_id" => $media->id
+		));
+
+		// deliver the message to the members of circles.
+		$status = self::broadcast($message->id, $circles);
+
+		if ($status == false)
+		{
+			// TODO: May be delete the message.
+			return null;
+		}
+
+		return $message;
 	}
 
 	// This is triggered to send a specific message for a group circles.
-	public static function distribute($message_id, $circles)
+	// Returns an object of the message or null.
+	public static function broadcast($message_id, $circles)
 	{
 		// Get the logged in user.
 		$user = User::current();
@@ -88,6 +103,25 @@ class Message extends Eloquent {
 			});
 		}
 
-		dd($member_circles->count());
+		if ($member_circles->count() == 0)
+		{
+			return false;
+		}
+
+		// Deliver the message.
+		foreach ($circles as $circle)
+		{
+			// Get the active members in the current circle.
+			$members = MemberCircle::where("circle_id", "=", $circle)->where("status", "=", "active")->get();
+
+			foreach ($members as $member)
+			{
+				// Deliver this message to the member.
+				// TODO: I don't know may be make sure that everybody is receiving the message.
+				CircleMessageMember::broadcast($circle, $message_id, $member->id);
+			}
+		}
+
+		return true;
 	}
 }

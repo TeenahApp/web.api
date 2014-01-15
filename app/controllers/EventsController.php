@@ -150,17 +150,18 @@ class EventsController extends \Controller {
 		}
 
 		// TODO: Get the circle(s) that is/are invited to the event with the member(s).
-		$event = TEvent::with("creator")->find($id);
+		$event = TEvent::with("creator")->with("members")->with("medias")->find($id);
 		//$cem_circles = CircleEventMember::where("event_id", "=", $event->id)->whereIn("circle_id", $member_circles)->groupBy("circle_id")->with("circle")->get();//, "circle");
 		//dd($cem_circles);
 
 		// Make an action for the logged in user (member); specifically "view".
-		Action::viewEvent($event->id);
+		Action::view("event", $event->id);
 
 		// TODO: Get the decisions.
 		// TODO: Get the likes, and comments.
 
 		// TODO: Fill the circles.
+		/*
 		return Response::json(array(
 				"id" => $event->id,
 				"title" => $event->title,
@@ -176,6 +177,9 @@ class EventsController extends \Controller {
 				),
 				"circles" => array()
 		), 200);
+		*/
+
+		return $event;
 	}
 
 	/**

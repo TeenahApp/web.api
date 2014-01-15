@@ -82,7 +82,13 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::get("events/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeEvent"));
 	Route::post("events/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentEvent"));
 
-	// TODO: Send a message to a circle or a group of circles.
-	Route::post("messages/texts", array("before" => "user.auth", "uses" => "MessagesController@text"));
+	// Send a message to a circle or a group of circles.
+	Route::post("messages/texts", array("before" => "user.auth", "uses" => "MessagesController@sendText"));
+	Route::put("messages/medias", array("before" => "user.auth", "uses" => "MessagesController@sendMedia"));
+	
+	// Fetch the unread messages.
+	Route::get("circles/{id}/messages", array("before" => "user.auth", "uses" => "MessagesController@fetch"))->where("id", "[0-9]+");;
+
+	//events/{id}/medias
 
 });
