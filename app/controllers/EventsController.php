@@ -7,9 +7,25 @@ class EventsController extends \Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($circle_id)
 	{
 		//
+		$user = User::current();
+
+		// Check if the member is a member of the circle.
+		$memberized = MemberCircle::where("circle_id", "=", $circle_id)->where("member_id", "=", $user->member_id)->first();
+
+		if (is_null($memberized))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		$events = CircleEventMember::with("event")->where("circle_id", "=", $circle_id)->where("member_id", "=", $user->member_id)->get();
+		
+		// Done.
+		return array_fetch($events->toArray(), "event");
 	}
 
 	/**

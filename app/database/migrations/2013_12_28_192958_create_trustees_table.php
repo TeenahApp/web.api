@@ -16,6 +16,7 @@ class CreateTrusteesTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_a");
 			$table->bigInteger("member_b");
+			$table->boolean("active")->default(1);
 			$table->timestamps();
 		});
 	}

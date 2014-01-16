@@ -53,12 +53,6 @@ class Message extends Eloquent {
 		// Get the user information.
 		$user = User::current();
 
-		// Create a new message.
-		$message = self::create(array(
-			"category" => "text",
-			"created_by" => $user->member_id
-		));
-
 		// Try to upload the media.
 		$media = Media::upload($category, $data, $extension);
 
@@ -66,6 +60,12 @@ class Message extends Eloquent {
 		{
 			return null;
 		}
+
+		// Create a new message.
+		$message = self::create(array(
+			"category" => "text",
+			"created_by" => $user->member_id
+		));
 
 		// Add the media to the message.
 		MessageMedia::create(array(

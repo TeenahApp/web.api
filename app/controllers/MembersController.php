@@ -41,6 +41,27 @@ class MembersController extends \Controller {
 	public function show($id)
 	{
 		//
+		$user = User::current();
+
+		if (!Member::canUseResource($user->member_id, $id))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Get the member if exists.
+		$member = Member::with("jobs")->with("educations")->find($id);
+
+		if (is_null($member))
+		{
+			return Response::json(array(
+				"message" => "Cannot find the resource."
+			), 404);
+		}
+
+		// Done.
+		return $member;
 	}
 
 	/**

@@ -36,7 +36,7 @@ class Media extends Eloquent {
 			return null;
 		}
 
-		// TODO: Check if the file is really a valid file; not a maleware.
+		// TODO: Check if the file is really a valid file; not a malware.
 
 		// Set the file fullname.
 		$output_filename = "uploads/" . str_random(40) . ".{$extension}";

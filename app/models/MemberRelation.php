@@ -66,6 +66,7 @@ class MemberRelation extends Eloquent {
 
 		// TODO: Update the fullname for one or both of members.
 		// TODO: Update the trustees.
+		//$trustee = Trustee::where("member_a", "=", );
 
 		// Done.
 		return array(

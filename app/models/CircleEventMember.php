@@ -12,7 +12,7 @@ class CircleEventMember extends Eloquent {
 
 	public function event()
 	{
-		return $this->belongsTo("Event");
+		return $this->belongsTo("TEvent")->with("creator");
 	}
 
 	public function member()

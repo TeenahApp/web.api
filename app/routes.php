@@ -33,6 +33,9 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Initial login for the user, there must be a member related to.
 	Route::post("users/members", array("before" => "user.auth", "uses" => "UsersController@initialize"));
 
+	// Get the member that is selected.
+	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("member_id", "[0-9]+");
+
 	// Update the photo of a member.
 	Route::put("members/{member_id}/photos", array("before" => "user.auth", "uses" => "MembersController@uploadPhoto"))->where("member_id", "[0-9]+");
 
@@ -66,6 +69,9 @@ Route::group(array("prefix" => "api/v1"), function()
 	// TODO: Modify and Delete a circle.
 	Route::get("circles/{id}/leave", array("before" => "user.auth", "uses" => "MemberCirclesController@leave"));
 
+	// Get the events of a circle.
+	Route::get("circles/{id}/events", array("before" => "user.auth", "uses" => "EventsController@index"))->where("id", "[0-9]+");
+
 	// Create an event.
 	Route::post("events", array("before" => "user.auth", "uses" => "EventsController@store"));
 
@@ -76,6 +82,9 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::put("events/{id}", array("before" => "user.auth", "uses" => "EventsController@update"));
 	Route::delete("events/{id}", array("before" => "user.auth", "uses" => "EventsController@destroy"));
 	
+	// Upload a media to an event.
+	Route::put("events/{id}/medias", array("before" => "user.auth", "uses" => "EventMediasController@upload"))->where("id", "[0-9]+");
+
 	// Decisions on events.
 	Route::put("events/{id}/decision/{decision}", array("before" => "user.auth", "uses" => "EventsController@decide"));
 	Route::get("events/{id}/decision", array("before" => "user.auth", "uses" => "EventsController@showDecision"));
@@ -85,10 +94,8 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Send a message to a circle or a group of circles.
 	Route::post("messages/texts", array("before" => "user.auth", "uses" => "MessagesController@sendText"));
 	Route::put("messages/medias", array("before" => "user.auth", "uses" => "MessagesController@sendMedia"));
-	
-	// Fetch the unread messages.
-	Route::get("circles/{id}/messages", array("before" => "user.auth", "uses" => "MessagesController@fetch"))->where("id", "[0-9]+");;
 
-	//events/{id}/medias
+	// Fetch the unread messages.
+	Route::get("circles/{id}/messages", array("before" => "user.auth", "uses" => "MessagesController@fetch"))->where("id", "[0-9]+");
 
 });
