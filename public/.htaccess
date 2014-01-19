@@ -1,6 +1,5 @@
-Options +FollowSymLinks
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-d
+RewriteEngine on
+RewriteBase /web.api/
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]

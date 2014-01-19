@@ -140,17 +140,6 @@ class MemberRelationsController extends \Controller {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
@@ -167,9 +156,50 @@ class MemberRelationsController extends \Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($member_a)
 	{
-		//
-	}
 
+		// Get the first member to relate from.
+		$member_a = Member::where("id", "=", $member_a)->first();
+
+		if (is_null($member_a))
+		{
+			return Response::json(array(
+				"message" => "The member that is chosen cannot be found."
+			), 404);
+		}
+
+		// Check if the (logged in) member is able to upload a photo for the chosen member.
+		$logged_in_user = User::current();
+
+		if (!Member::canUseResource($logged_in_user->member_id, $member_a->id))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to access this resource."
+			), 403);
+		}
+
+		// Get the member_b to decide.
+		$member_b = Member::find(Input::get("member_b"));
+
+		// Check if the member does exist.
+		if (is_null($member_b))
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Delete the relation from (a) to (b); and vice versa.
+		// I.
+		MemberRelation::where("member_a", "=", $member_a->id)->where("member_b", "=", $member_b->id)->delete();
+		Trustee::where("member_a", "=", $member_a->id)->where("member_b", "=", $member_b->id)->delete();
+
+		// II.
+		MemberRelation::where("member_a", "=", $member_b->id)->where("member_b", "=", $member_a->id)->delete();
+		Trustee::where("member_a", "=", $member_b->id)->where("member_b", "=", $member_a->id)->delete();
+
+		// Done.
+		return Response::json("", 204);
+	}
 }

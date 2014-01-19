@@ -65,17 +65,6 @@ class MembersController extends \Controller {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
@@ -83,7 +72,60 @@ class MembersController extends \Controller {
 	 */
 	public function update($id)
 	{
-		//
+		// Get the current logged in user.
+		$user = User::current();
+
+		if (!Member::canUseResource($user->member_id, $id))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		$validator = Validator::make(
+			array(
+				"dob" => Input::get("dob"),
+				"dod" => Input::get("dod"),
+				"email" => Input::get("email"),
+				"marital_status" => Input::get("marital_status")
+			),
+			array(
+				"dob" => "date",
+				"dod" => "date",
+				"email" => "email",
+				"marital_status" => "in:single,married,divorced,widow"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Get the chosen member.
+		$member = Member::find($id);
+
+		if (is_null($member))
+		{
+			return Response::json(array(
+				"message" => "Cannot find the resource."
+			), 404);
+		}
+
+		// Update the member.
+		$member->update(array(
+			"dob" => Input::get("dob"),
+			"pob" => Input::get("pob"),
+			"dod" => Input::get("dod"),
+			"pod" => Input::get("pod"),
+			"email" => Input::get("email"),
+			"marital_status" => Input::get("marital_status")
+		));
+
+		// Done.
+		return Response::json("", 204);
 	}
 
 	/**
