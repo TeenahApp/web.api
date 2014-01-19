@@ -4,6 +4,7 @@ class TEvent extends Eloquent {
 
 	protected $table = "events";
 	protected $guarded = array();
+	protected $appends = array("views_count", "likes_count", "comments_count");
 
 	public function creator()
 	{
@@ -30,5 +31,20 @@ class TEvent extends Eloquent {
 
 		// Delete the event.
 		return parent::delete();
+	}
+
+	public function getViewsCountAttribute()
+	{
+		return Action::calculate("view", "event", $this->id);
+	}
+
+	public function getLikesCountAttribute()
+	{
+		return Action::calculate("like", "event", $this->id);
+	}
+
+	public function getCommentsCountAttribute()
+	{
+		return Action::calculate("comment", "event", $this->id);
 	}
 }

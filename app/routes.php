@@ -34,13 +34,19 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::post("users/members", array("before" => "user.auth", "uses" => "UsersController@initialize"));
 
 	// Get the member that is selected.
-	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("member_id", "[0-9]+");
+	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("id", "[0-9]+");
+
+	// TODO: Update the member information.
+	Route::update("members/{id}", array("before" => "user.auth", "uses" => "MembersController@update"))->where("id", "[0-9]+");
 
 	// Update the photo of a member.
 	Route::put("members/{member_id}/photos", array("before" => "user.auth", "uses" => "MembersController@uploadPhoto"))->where("member_id", "[0-9]+");
 
 	// Create a relationship between two members.
 	Route::post("members/{member_a}/relations", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+", "member_b" => "[0-9]+"));
+
+	// TODO: Delete a relationship between two members.
+	
 
 	// Create an education for a member.
 	Route::post("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("member_id", "[0-9]+");
@@ -78,8 +84,10 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get an event.
 	Route::get("events/{id}", array("before" => "user.auth", "uses" => "EventsController@show"));
 
-	// TODO: 
+	// Update an event.
 	Route::put("events/{id}", array("before" => "user.auth", "uses" => "EventsController@update"));
+	
+	// Delete an event.
 	Route::delete("events/{id}", array("before" => "user.auth", "uses" => "EventsController@destroy"));
 	
 	// Upload a media to an event.

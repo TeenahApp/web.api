@@ -65,6 +65,12 @@ class MemberRelation extends Eloquent {
 		}
 
 		// TODO: Update the fullname for one or both of members.
+		if ($relation == "father")
+		{
+			$visited_nodes = array($member_a);
+			self::updateFullname($member_a, $visited_nodes);
+		}
+
 		// TODO: Update the trustees.
 		//$trustee = Trustee::where("member_a", "=", );
 
@@ -121,5 +127,10 @@ class MemberRelation extends Eloquent {
 		{
 			return "step" . $parent;
 		}
+	}
+
+	public static function updateFullname($id, $visited_nodes = array())
+	{
+		// TODO: Create this functionality later.
 	}
 }

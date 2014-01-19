@@ -93,4 +93,10 @@ class Action extends Eloquent {
 	{
 		return self::make("comment", $area, $affected_id, $comment);
 	}
+
+	// Create a method to calculate actions.
+	public static function calculate($action, $area, $affected_id)
+	{
+		return Action::where("area", "=", $area)->where("action", "=", $action)->where("affected_id", "=", $affected_id)->count();
+	}
 }

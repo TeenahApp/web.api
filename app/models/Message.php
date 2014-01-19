@@ -124,4 +124,16 @@ class Message extends Eloquent {
 
 		return true;
 	}
+
+	public function delete()
+	{
+		// Delete every message with media.
+		MessageMedia::where("media_id", "=", $this->id)->delete();
+
+		// Delete every delivered message.
+		CircleMessageMember::where("message_id", "=", $this->id)->delete();
+
+		// Delete the event.
+		return parent::delete();
+	}
 }

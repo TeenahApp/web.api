@@ -151,8 +151,8 @@ class MemberCirclesController extends \Controller {
 		//
 		$user = User::current();
 
-		// Check if the circle does exist.
-		$member_circles_count = MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->where("status", "=", "active")->count();
+		// Check if the member is in the circle.
+		$member_circles_count = MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->count();
 
 		if ($member_circles_count == 0)
 		{
@@ -161,8 +161,9 @@ class MemberCirclesController extends \Controller {
 			), 403);
 		}
 
-		// Everything is okay, leave please.
-		MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->update(array("status" => "blocked"));
+		// Everything is okay, let the member leaves the circle.
+		//MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->update(array("status" => "blocked"));
+		MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->delete();
 
 		// Done.
 		return Response::json("", 204);

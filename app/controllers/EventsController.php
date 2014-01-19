@@ -29,16 +29,6 @@ class EventsController extends \Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
@@ -173,40 +163,10 @@ class EventsController extends \Controller {
 		// Make an action for the logged in user (member); specifically "view".
 		Action::view("event", $event->id);
 
-		// TODO: Get the decisions.
-		// TODO: Get the likes, and comments.
-
 		// TODO: Fill the circles.
-		/*
-		return Response::json(array(
-				"id" => $event->id,
-				"title" => $event->title,
-				"start_datetime" => $event->start_datetime,
-				"finish_datetime" => $event->finish_datetime,
-				"location" => $event->location,
-				"latitude" => $event->latitude,
-				"longtitude" => $event->longtitude,
-				"creator" => array(
-					"id" => $event->creator->id,
-					"name" => $event->creator->name,
-					"mobile" => $event->creator->mobile
-				),
-				"circles" => array()
-		), 200);
-		*/
 
-		return $event;
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
+		//$event->likes_count = 4;
+		return $event;//->likes();
 	}
 
 	/**
@@ -217,8 +177,65 @@ class EventsController extends \Controller {
 	 */
 	public function update($id)
 	{
-		//
-		return "hello world";
+		// Only the creator of the event is able to update it.
+		$user = User::current();
+
+		// 
+		$validator = Validator::make(
+			array(
+				"title" => Input::get("title"),
+				"start_datetime" => Input::get("start_datetime"),
+				"finish_datetime" => Input::get("finish_datetime"),
+				"location" => Input::get("location"),
+				"latitude" => Input::get("latitude"),
+				"longtitude" => Input::get("longtitude")
+			),
+			array(
+				"title" => "required",
+				"start_datetime" => "required|date",
+				"finish_datetime" => "required|date",
+				"location" => "required",
+				"latitude" => "regex:/\d+\.\d+/",
+				"longtitude" => "regex:/\d+\.\d+/"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Check if the event does exist.
+		$event = TEvent::find($id);
+
+		if (is_null($event))
+		{
+			return Response::json(array(
+				"message" => "The event is not found."
+			), 404);
+		}
+
+		// Check if the logged in user (member) is the creator of the event.
+		if ($event->created_by != $user->member_id)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		$event->update(array(
+			"title" => Input::get("title"),
+			"start_datetime" => Input::get("start_datetime"),
+			"finish_datetime" => Input::get("finish_datetime"),
+			"location" => Input::get("location"),
+			"latitude" => Input::get("latitude"),
+			"longtitude" => Input::get("longtitude")
+		));
+
+		// Done.
+		return Response::json("", 204);
 	}
 
 	/**
@@ -251,7 +268,7 @@ class EventsController extends \Controller {
 		}
 
 		// Everything is fine and dandy.
-		// TODO: Delete every related row to $event.
+		// Delete every related row to $event.
 		$event->delete();
 
 		return Response::json("", 204);
@@ -259,7 +276,7 @@ class EventsController extends \Controller {
 
 	public function decide($id, $decision)
 	{
-		// TODO: Make a decision for the member about the event.
+		// Make a decision for the member about the event.
 		$user = User::current();
 
 		$validator = Validator::make(
@@ -302,7 +319,6 @@ class EventsController extends \Controller {
 
 	public function showDecision($id)
 	{
-		// TODO: Make a decision for the member about the event.
 		$user = User::current();
 
 		$validator = Validator::make(
