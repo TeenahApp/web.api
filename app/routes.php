@@ -37,27 +37,39 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("id", "[0-9]+");
 
 	// TODO: Update the member information.
-	Route::update("members/{id}", array("before" => "user.auth", "uses" => "MembersController@update"))->where("id", "[0-9]+");
+	Route::put("members/{id}", array("before" => "user.auth", "uses" => "MembersController@update"))->where("id", "[0-9]+");
 
 	// Update the photo of a member.
 	Route::put("members/{member_id}/photos", array("before" => "user.auth", "uses" => "MembersController@uploadPhoto"))->where("member_id", "[0-9]+");
 
 	// Create a relationship between two members.
-	Route::post("members/{member_a}/relations", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+", "member_b" => "[0-9]+"));
+	Route::post("members/{member_a}/relations", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+"));
 
 	// TODO: Delete a relationship between two members.
-	
+	Route::delete("members/{member_a}/relationship", array("before" => "user.auth", "uses" => "MemberRelationsController@store"))->where(array("member_a" => "[0-9]+"));
 
 	// Create an education for a member.
-	Route::post("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("member_id", "[0-9]+");
+	Route::post("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("id", "[0-9]+");
 
 	// Get the educations for a member.
 	Route::get("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@index"))->where("id", "[0-9]+");
+
+	// TODO: Update an education of a member.
+	Route::put("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("id", "[0-9]+");
+
+	// TODO: Delete an education of a member.
+	Route::delete("members/{id}/educations", array("before" => "user.auth", "uses" => "MemberEducationsController@store"))->where("id", "[0-9]+");
 
 	// Create a job for a member.
 	Route::post("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@store"))->where("id", "[0-9]+");
 
 	// Get the jobs for a member.
+	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");
+
+	// TODO: Update a job for a member.
+	Route::post("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@store"))->where("id", "[0-9]+");
+
+	// TODO: Delete a job for a member.
 	Route::get("members/{id}/jobs", array("before" => "user.auth", "uses" => "MemberJobsController@index"))->where("id", "[0-9]+");
 
 	// Get the members of a circle.
@@ -72,7 +84,7 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Create a circle; must invite at least one member.
 	Route::post("circles", array("before" => "user.auth", "uses" => "CirclesController@store"));
 
-	// TODO: Modify and Delete a circle.
+	// Leave a circle.
 	Route::get("circles/{id}/leave", array("before" => "user.auth", "uses" => "MemberCirclesController@leave"));
 
 	// Get the events of a circle.
@@ -96,8 +108,23 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Decisions on events.
 	Route::put("events/{id}/decision/{decision}", array("before" => "user.auth", "uses" => "EventsController@decide"));
 	Route::get("events/{id}/decision", array("before" => "user.auth", "uses" => "EventsController@showDecision"));
+
+	// Actions
 	Route::get("events/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeEvent"));
 	Route::post("events/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentEvent"));
+
+	// TODO: 
+	Route::get("members/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMember"));
+	Route::post("members/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentMember"));
+
+	// TODO: Remember to make view action for a media.
+	Route::get("medias/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMedia"));
+	Route::post("medias/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentMedia"));
+
+	// TODO: 
+	Route::get("members/{member_id}/comments/{comment_id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMemberComment"));
+	Route::get("events/{event_id}/comments/{comment_id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMemberComment"));
+	Route::get("medias/{media_id}/comments/{comment_id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMemberComment"));
 
 	// Send a message to a circle or a group of circles.
 	Route::post("messages/texts", array("before" => "user.auth", "uses" => "MessagesController@sendText"));
