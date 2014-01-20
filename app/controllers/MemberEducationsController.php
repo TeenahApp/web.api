@@ -105,9 +105,9 @@ class MemberEducationsController extends \Controller {
 		}
 
 		// If finish year is there, then status is finished.
-		$status = "ongoing";
+		$status = is_null(Input::get("status")) ? "ongoing" : Input::get("status");
 
-		if (!empty($finish_year))
+		if (!empty($finish_year) and !in_array($status, array("dropped", "pending")))
 		{
 			$status = "finished";
 		}
@@ -125,14 +125,9 @@ class MemberEducationsController extends \Controller {
 		);
 
 		// Done.
-		return Response::json(array(
-			"message" => "The education has been created.",
-			"degree" => $education->degree,
-			"major_id" => $major_id,
-			"start_year" => $education->start_year,
-			"finish_year" => $education->finish_year,
-			"status" => $education->status
-		), 201);
+		return Response::json(
+			$education->with("major")->first()
+		, 201);
 	}
 
 	/**
@@ -152,20 +147,125 @@ class MemberEducationsController extends \Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($member_id, $education_id)
 	{
-		//
+		$user = User::current();
+
+		if (!Member::canUseResource($user->member_id, $member_id))
+		{
+			return Response::json(array(
+				"message" => "Not authroized to use this resource."
+			), 403);
+		}
+
+		$validator = Validator::make(
+			array(
+				"degree" => Input::get("degree"),
+				"start_year" => Input::get("start_year"),
+				"finish_year" => Input::get("finish_year"),
+				"status" => Input::get("status")
+			),
+			array(
+				"degree" => "required|in:none,elementary,intermediate,secondary,diploma,licentiate,bachelor,master,doctorate",
+				"start_year" => "numeric",
+				"finish_year" => "numeric",
+				"status" => "in:ongoing,finished,pending,dropped"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Check if the education does exist.
+		$education = MemberEducation::where("member_id", "=", $member_id)->where("id", "=", $education_id)->first();
+
+		if (is_null($education))
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		$major = Input::get("major");
+		$finish_year = Input::get("finish_year");
+
+		// Check if the major is not empty.
+		if (!empty($major))
+		{
+			$found_major = EducationMajor::where("name", "=", $major)->first();
+
+			if (is_null($found_major))
+			{
+				// Create a major.
+				$found_major = EducationMajor::create(array("name" => $major));
+				$major_id = $found_major->id;
+			}
+			else
+			{
+				$major_id = $found_major->id;
+			}
+		}
+		else
+		{
+			$major_id = null;
+		}
+
+		// If finish year is there, then status is finished.
+		$status = is_null(Input::get("status")) ? "ongoing" : Input::get("status");
+
+		if (!empty($finish_year) and !in_array($status, array("dropped", "pending")))
+		{
+			$status = "finished";
+		}
+
+		// Update the education of the member.
+		$education->update(
+			array(
+				"degree" => Input::get("degree"),
+				"major_id" => $major_id,
+				"start_year" => Input::get("start_year"),
+				"finish_year" => $finish_year,
+				"status" => $status
+			)
+		);
+
+		// Done.
+		return Response::json(
+			$education->with("major")->first()
+		, 200);
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
+	//
+	public function destroy($member_id, $education_id)
 	{
-		//
+		$user = User::current();
+
+		if (!Member::canUseResource($user->member_id, $member_id))
+		{
+			return Response::json(array(
+				"message" => "Not authroized to use this resource."
+			), 403);
+		}
+
+		// Check if the education does exist.
+		$education = MemberEducation::where("member_id", "=", $member_id)->where("id", "=", $education_id)->first();
+
+		if (is_null($education))
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Delete the education for a member.
+		$education->delete();
+
+		// Done.
+		return Response::json("", 204);
 	}
 
 }
