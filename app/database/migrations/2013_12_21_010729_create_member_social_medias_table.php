@@ -16,7 +16,7 @@ class CreateMemberSocialMediasTable extends Migration {
 			$table->bigIncrements("id");
 			$table->bigInteger("member_id");
 			$table->bigInteger("social_media_id");
-			$table->mediumText("replacement");
+			$table->mediumText("account");
 			$table->timestamps();
 		});
 	}

@@ -4,6 +4,7 @@ class Member extends Eloquent {
 
 	protected $table = "members";
 	protected $guarded = array();
+	protected $appends = array("social_medias");
 
 	public function user()
 	{
@@ -77,6 +78,11 @@ class Member extends Eloquent {
 		return $this->hasManyThrough("SocialMedia", "MemberSocialMedia");
 	}
 
+	public function getSocialMediasAttribute()
+	{
+		return MemberSocialMedia::accounts($this->id)->get();
+	}
+
 	// Normalize the name; by removing Harakat's, and Madd's.
 	public static function normalize($name)
 	{
@@ -92,8 +98,10 @@ class Member extends Eloquent {
 		return $name;
 	}
 
-	// TODO:	There should be an override method for create().
-	//			It fills the fullname of a member by moving up to fathers of.
+	public static function updateFullname($id, $visited_nodes = array())
+	{
+		// TODO: Create this functionality later.
+	}
 
 	// One of the main methods for the system to decide if the logged in member can use a resource for another/same member.
 	// TODO: Build this method to be real.

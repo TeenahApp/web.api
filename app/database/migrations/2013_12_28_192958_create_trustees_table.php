@@ -14,8 +14,8 @@ class CreateTrusteesTable extends Migration {
 		//
 		Schema::create("trustees", function($table){
 			$table->bigIncrements("id");
-			$table->bigInteger("member_a");
-			$table->bigInteger("member_b");
+			$table->bigInteger("member_id");
+			$table->bigInteger("trustee_id");
 			$table->boolean("active")->default(1);
 			$table->timestamps();
 		});

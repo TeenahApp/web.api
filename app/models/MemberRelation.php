@@ -37,6 +37,9 @@ class MemberRelation extends Eloquent {
 	// Make a relationship between two members.
 	public static function make($member_a, $member_b, $relation)
 	{
+		// Get the logged in user.
+		$user = User::current();
+
 		// $member_b is a $relation to $member_a.
 		$relationOne = self::where("member_a", "=", $member_b->id)->where("member_b", "=", $member_a->id)->first();
 
@@ -71,8 +74,8 @@ class MemberRelation extends Eloquent {
 			self::updateFullname($member_a, $visited_nodes);
 		}
 
-		// TODO: Update the trustees.
-		//$trustee = Trustee::where("member_a", "=", );
+		// Make/Update the trustees.
+		Trustee::make($member_b, $member_a, $user->member_id);
 
 		// Done.
 		return array(
@@ -127,10 +130,5 @@ class MemberRelation extends Eloquent {
 		{
 			return "step" . $parent;
 		}
-	}
-
-	public static function updateFullname($id, $visited_nodes = array())
-	{
-		// TODO: Create this functionality later.
 	}
 }

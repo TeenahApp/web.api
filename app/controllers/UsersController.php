@@ -142,6 +142,8 @@ class UsersController extends \Controller {
 		{
 			$has_member = true;
 			$user->member_id = $found_member->id;
+
+			// TODO: Update the fullname for the member.
 		}
 
 		// Save changes.

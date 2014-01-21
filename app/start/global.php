@@ -49,10 +49,12 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 App::error(function(Exception $exception, $code)
 {
 	//TODO: Log::error($exception);
-	//echo $exception;
+	echo $exception;
+	/*
 	return Response::json(array(
 		"message" => "Route cannot be found."
 	), 404);
+	*/
 });
 
 /*

@@ -160,6 +160,16 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Fetch the unread messages.
 	Route::get("circles/{id}/messages", array("before" => "user.auth", "uses" => "MessagesController@fetch"))->where("id", "[0-9]+");
 
-	// 
+	// Get the social medias of the member.
+	Route::get("members/{member_id}/socialmedias", array("before" => "user.auth", "uses" => "MemberSocialMediasController@index"))->where("member_id", "[0-9]+");
+
+	// Create a member social media.
+	Route::post("socialmedias", array("before" => "user.auth", "uses" => "MemberSocialMediasController@store"));
+	
+	// Update a social media for a member.
+	Route::put("socialmedias/{id}", array("before" => "user.auth", "uses" => "MemberSocialMediasController@update"))->where("id", "[0-9]+");
+	
+	// Delete a social media for a member.
+	Route::delete("socialmedias/{id}", array("before" => "user.auth", "uses" => "MemberSocialMediasController@destroy"))->where("id", "[0-9]+");
 
 });

@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder {
 
 		$this->call("UserTableSeeder");
 		$this->call("MemberTableSeeder");
+		$this->call("SocialMediaSeeder");
 	}
 
 }
@@ -24,7 +25,7 @@ class UserTableSeeder extends Seeder {
 		User::create(
 			array(
 				"member_id" => 1,
-				"mobile" => "966"
+				"mobile" => "966",
 				"token" => Hash::make("123") // TODO: This is for development/testing only.
 			)
 		);
