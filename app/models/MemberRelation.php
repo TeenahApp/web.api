@@ -57,7 +57,7 @@ class MemberRelation extends Eloquent {
 
 		// $member_a is an inverse $relation to $member_b.
 		$relationTwo = self::where("member_a", "=", $member_a->id)->where("member_b", "=", $member_b->id)->first();
-
+		
 		if (is_null($relationTwo))
 		{
 			$relationTwo = self::create(array(
@@ -67,15 +67,26 @@ class MemberRelation extends Eloquent {
 			));
 		}
 
-		// TODO: Update the fullname for one or both of members.
-		if ($relation == "father")
+		// Update the fullname for one or both of members.
+		if (in_array($relation, array("father", "son", "daughter")))
 		{
-			$visited_nodes = array($member_a);
-			self::updateFullname($member_a, $visited_nodes);
+			if ($relation == "father")
+			{
+				// Get the tribe id.
+				$tribe_id = Member::getTribeId($member_b->id);
+			}
+			else
+			{
+				// Get the tribe id.
+				$tribe_id = Member::getTribeId($member_a->id);
+			}
+
+			// Update the fullname of the tribe and the members.
+			Member::updateTribeFullnames($tribe_id);
 		}
 
 		// Make/Update the trustees.
-		Trustee::make($member_b, $member_a, $user->member_id);
+		Trustee::make($member_b->id, $member_a->id, $user->member_id);
 
 		// Done.
 		return array(

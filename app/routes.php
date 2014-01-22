@@ -103,6 +103,9 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get the events of a circle.
 	Route::get("circles/{id}/events", array("before" => "user.auth", "uses" => "EventsController@index"))->where("id", "[0-9]+");
 
+	// Get the events of a circle.
+	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "EventsController@stats"))->where("id", "[0-9]+");
+
 	// Create an event.
 	Route::post("events", array("before" => "user.auth", "uses" => "EventsController@store"));
 
@@ -154,7 +157,7 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Send a message to a circle or a group of circles.
 	Route::post("messages/texts", array("before" => "user.auth", "uses" => "MessagesController@sendText"));
 
-	// TODO:
+	// Send a media to a circle or a group of circles.
 	Route::put("messages/medias", array("before" => "user.auth", "uses" => "MessagesController@sendMedia"));
 
 	// Fetch the unread messages.
@@ -172,4 +175,17 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Delete a social media for a member.
 	Route::delete("socialmedias/{id}", array("before" => "user.auth", "uses" => "MemberSocialMediasController@destroy"))->where("id", "[0-9]+");
 
+	// Create a trustee for the logged in member.
+	Route::post("trustees", array("before" => "user.auth", "uses" => "TrusteesController@store"));
+
+	// Get the list of trustees.
+	Route::get("trustees", array("before" => "user.auth", "uses" => "TrusteesController@index"));
+
+	// Activate a trustee.
+	Route::get("trustees/{id}/activate", array("before" => "user.auth", "uses" => "TrusteesController@activate"))->where("id", "[0-9]+");
+
+	// Deactivate a trustee.
+	Route::get("trustees/{id}/deactivate", array("before" => "user.auth", "uses" => "TrusteesController@deactivate"))->where("id", "[0-9]+");
+
+	Route::get("users/dashboard", array("before" => "user.auth", "uses" => "UsersController@dashboard"));
 });

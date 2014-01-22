@@ -236,4 +236,10 @@ class UsersController extends \Controller {
 			"user_id" => $user->id
 		), 201);
 	}
+
+	public function dashboard()
+	{
+		$user = User::current();
+		return Member::dashboard($user->member_id);
+	}
 }

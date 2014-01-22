@@ -5,6 +5,12 @@ class Trustee extends Eloquent {
 	protected $table = "trustees";
 	protected $guarded = array();
 
+	public function trustee()
+	{
+		return $this->belongsTo("Member", "trustee_id");
+	}
+
+	// TODO/FIXME: trustees are not trustees anymore.
 	public static function make($member_id, $trustee_id, $creator_id)
 	{
 		// Trustee is a trustee for a member.
@@ -12,7 +18,7 @@ class Trustee extends Eloquent {
 
 		if ($first_trustee == 0)
 		{
-			self::create(array(
+			$item = self::insert(array(
 				"member_id" => $member_id,
 				"trustee_id" => $trustee_id
 			));
@@ -23,7 +29,7 @@ class Trustee extends Eloquent {
 
 		if ($second_trustee == 0)
 		{
-			self::create(array(
+			self::insert(array(
 				"member_id" => $member_id,
 				"trustee_id" => $creator_id
 			));

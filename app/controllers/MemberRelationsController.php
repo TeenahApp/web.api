@@ -112,10 +112,10 @@ class MemberRelationsController extends \Controller {
 			// TODO: Send SMS asking new member to download app.
 		}
 
-		// TODO: Check if the related member is a root.
+		// Check if the related member is a root.
 		if (Input::get("is_root") == 1)
 		{
-			// TODO: Please fix this.
+			Member::updateTribeIds($member_b->id, $member_b->id);
 		}
 
 		// Make a relationship between two members.
@@ -124,7 +124,9 @@ class MemberRelationsController extends \Controller {
 		return Response::json(array(
 			"message" => "Relationship has been created successfully.",
 			"a-to-b" => $result["a-to-b"],
-			"b-to-a" => $result["b-to-a"]
+			"b-to-a" => $result["b-to-a"],
+			"member_a" => $member_a->id,
+			"member_b" => $member_b->id,
 		), 201);
 	}
 
