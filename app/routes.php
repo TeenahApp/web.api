@@ -104,7 +104,7 @@ Route::group(array("prefix" => "api/v1"), function()
 	Route::get("circles/{id}/events", array("before" => "user.auth", "uses" => "EventsController@index"))->where("id", "[0-9]+");
 
 	// Get the events of a circle.
-	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "EventsController@stats"))->where("id", "[0-9]+");
+	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "CirclesController@stats"))->where("id", "[0-9]+");
 
 	// Create an event.
 	Route::post("events", array("before" => "user.auth", "uses" => "EventsController@store"));

@@ -158,7 +158,7 @@ class CirclesController extends \Controller {
 	 */
 	public function show($id)
 	{
-		//
+		// TODO: There is another method gets the circle members.
 	}
 
 	/**
@@ -170,6 +170,43 @@ class CirclesController extends \Controller {
 	public function update($id)
 	{
 		//
+		$user = User::current();
+
+		// Check if the circle does exist.
+		$circle = Circle::where("id", "=", $id)->where("created_by", "=", $user->member_id)->first();
+
+		if (is_null($circle))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		$validator = Validator::make(
+			array(
+				"name" => Input::get("name"),
+			),
+			array(
+				"name" => "required"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
+		}
+
+		// Update the circle.
+		$circle->update(array(
+			"name" => Input::get("name")
+		));
+
+		// Done.
+		return Response::json(array(
+			"message" => "Circle has been updated successfully."
+		), 200);
 	}
 
 	/**
@@ -180,7 +217,34 @@ class CirclesController extends \Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		// TODO: This is a controversial method.
+	}
+
+	public function stats($id)
+	{
+		// TODO: Members.
+
+		// TODO: Children average.
+
+		// TODO: Ages.
+
+		// TODO: Education.
+
+		// TODO: Majors.
+
+		// TODO: Companies.
+
+		// TODO: Jobs.
+
+		// TODO: Events.
+
+		// TODO: Messages.
+
+		// TODO: Medias.
+
+		// TODO: Names.
+
+		// TODO: Locations.
 	}
 
 }
