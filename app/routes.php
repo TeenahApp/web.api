@@ -103,7 +103,7 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get the events of a circle.
 	Route::get("circles/{id}/events", array("before" => "user.auth", "uses" => "EventsController@index"))->where("id", "[0-9]+");
 
-	// TODO: Get the events of a circle.
+	// Get the events of a circle.
 	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "CirclesController@stats"))->where("id", "[0-9]+");
 
 	// Create an event.
@@ -189,4 +189,10 @@ Route::group(array("prefix" => "api/v1"), function()
 
 	// Get the dashboard of the current user.
 	Route::get("users/dashboard", array("before" => "user.auth", "uses" => "UsersController@dashboard"));
+
+	// Auto-complete companies.
+	Route::get("companies/autocomplete/{query}", array("before" => "user.auth", "uses" => "AutoCompletesController@companies"));
+
+	// Auto-complete majors.
+	Route::get("majors/autocomplete/{query}", array("before" => "user.auth", "uses" => "AutoCompletesController@majors"));
 });

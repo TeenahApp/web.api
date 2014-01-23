@@ -126,7 +126,7 @@ class MemberEducationsController extends \Controller {
 
 		// Done.
 		return Response::json(
-			$education->with("major")->first()
+			$education
 		, 201);
 	}
 

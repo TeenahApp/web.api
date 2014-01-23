@@ -106,7 +106,7 @@ class CirclesController extends \Controller {
 		// Extract members from the given list.
 		$members = explode(",", substr(Input::get("members"), 1, -1));
 
-		// TODO: Check if the members do exist in the members table.
+		// Check if the members do exist in the members table.
 		$real_members_count = Member::whereIn("id", $members)->where("id", "!=", $user->member_id)->count();
 
 		if (count($members) != $real_members_count)
@@ -148,17 +148,6 @@ class CirclesController extends \Controller {
 			"id" => $circle->id,
 			"name" => $circle->name
 		), 201);
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		// TODO: There is another method gets the circle members.
 	}
 
 	/**
@@ -209,20 +198,9 @@ class CirclesController extends \Controller {
 		), 200);
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		// TODO: This is a controversial method.
-	}
 
 	public function stats($id)
 	{
-//
 		$user = User::current();
 
 		// Check if the circle does exist.
