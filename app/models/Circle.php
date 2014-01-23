@@ -49,6 +49,44 @@ class Circle extends Eloquent {
 
 		// TODO: Ages.
 		// TODO: Build a cron job (a work) to update ages daily.
+		$age_cases = array(
+			"WHEN age >= 0 AND age <= 5 THEN '0-5'",
+			"WHEN age >= 6 AND age <= 10 THEN '6-10'",
+			"WHEN age >= 11 AND age <= 15 THEN '11-15'",
+			"WHEN age >= 16 AND age <= 20 THEN '16-20'",
+			"WHEN age >= 21 AND age <= 25 THEN '21-25'",
+			"WHEN age >= 26 AND age <= 30 THEN '26-30'",
+			"WHEN age >= 31 AND age <= 35 THEN '31-35'",
+			"WHEN age >= 36 AND age <= 40 THEN '36-40'",
+			"WHEN age >= 41 AND age <= 45 THEN '41-45'",
+			"WHEN age >= 46 AND age <= 50 THEN '46-50'",
+			"WHEN age >= 51 AND age <= 55 THEN '51-55'",
+			"WHEN age >= 56 AND age <= 60 THEN '56-60'",
+			"WHEN age >= 61 AND age <= 65 THEN '61-65'",
+			"WHEN age >= 66 AND age <= 70 THEN '66-70'",
+			"WHEN age >= 71 AND age <= 75 THEN '71-75'",
+			"WHEN age >= 76 AND age <= 80 THEN '76-80'",
+			"WHEN age >= 81 AND age <= 85 THEN '81-85'",
+			"WHEN age >= 86 AND age <= 90 THEN '86-90'",
+			"WHEN age >= 91 AND age <= 95 THEN '91-95'",
+			"WHEN age >= 96 AND age <= 100 THEN '96-100'",
+			"WHEN age >= 101 AND age <= 105 THEN '101-105'",
+			"WHEN age >= 106 AND age <= 110 THEN '106-110'",
+			"WHEN age >= 111 AND age <= 115 THEN '111-115'",
+			"WHEN age >= 116 AND age <= 120 THEN '116-120'",
+			"ELSE '>120'"
+		);
+
+		// Make the age cases query.
+		$age_cases_query = implode(" ", $age_cases);
+
+		// Set the ages.
+		$stats["ages"] = Member::whereIn("id", $circle_members)->select(
+			array(
+				DB::raw("COUNT(id) AS counts"),
+				DB::raw("(CASE $age_cases_query END) AS ranges")
+			)
+		)->groupBy("ranges")->orderBy("age", "ASC")->get()->toArray();
 
 		// Educations.
 		// educations => nones, etc.
