@@ -58,7 +58,7 @@ class CirclesController extends \Controller {
 				foreach ($relations as $relation)
 				{
 					MemberCircle::create(array(
-						"member_id" => $relation->secondmember->id,
+						"member_id" => $relation->member_b,
 						"circle_id" => $best_circle->id
 					));
 				}
@@ -222,29 +222,25 @@ class CirclesController extends \Controller {
 
 	public function stats($id)
 	{
-		// TODO: Members.
+//
+		$user = User::current();
 
-		// TODO: Children average.
+		// Check if the circle does exist.
+		$member_circles_count = MemberCircle::where("circle_id", "=", $id)->where("member_id", "=", $user->member_id)->count();
 
-		// TODO: Ages.
+		if ($member_circles_count == 0)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
 
-		// TODO: Education.
+		// Get the circle members.
+		$circle_members = array_fetch(MemberCircle::where("circle_id", "=", $id)->select("member_id")->get()->toArray(), "member_id");
 
-		// TODO: Majors.
-
-		// TODO: Companies.
-
-		// TODO: Jobs.
-
-		// TODO: Events.
-
-		// TODO: Messages.
-
-		// TODO: Medias.
-
-		// TODO: Names.
-
-		// TODO: Locations.
+		return Response::json(
+			Circle::stats($circle_members)
+		, 200);
 	}
 
 }

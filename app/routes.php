@@ -103,7 +103,7 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Get the events of a circle.
 	Route::get("circles/{id}/events", array("before" => "user.auth", "uses" => "EventsController@index"))->where("id", "[0-9]+");
 
-	// Get the events of a circle.
+	// TODO: Get the events of a circle.
 	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "CirclesController@stats"))->where("id", "[0-9]+");
 
 	// Create an event.
@@ -187,5 +187,6 @@ Route::group(array("prefix" => "api/v1"), function()
 	// Deactivate a trustee.
 	Route::get("trustees/{id}/deactivate", array("before" => "user.auth", "uses" => "TrusteesController@deactivate"))->where("id", "[0-9]+");
 
+	// Get the dashboard of the current user.
 	Route::get("users/dashboard", array("before" => "user.auth", "uses" => "UsersController@dashboard"));
 });
