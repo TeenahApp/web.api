@@ -11,14 +11,15 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-		$this->call("UserTableSeeder");
-		$this->call("MemberTableSeeder");
-		$this->call("SocialMediaSeeder");
+		$this->call("UsersTableSeeder");
+		$this->call("MembersTableSeeder");
+		$this->call("SocialMediasSeeder");
+		$this->call("TeenahAppsTableSeeder");
 	}
 
 }
 
-class UserTableSeeder extends Seeder {
+class UsersTableSeeder extends Seeder {
 
 	public function run()
 	{
@@ -32,7 +33,7 @@ class UserTableSeeder extends Seeder {
 	}
 }
 
-class MemberTableSeeder extends Seeder {
+class MembersTableSeeder extends Seeder {
 
 	public function run()
 	{
@@ -49,7 +50,7 @@ class MemberTableSeeder extends Seeder {
 // TODO: Insert all majors we know.
 // TODO: Insert companies we know.
 // TODO: Insert all social medias we know.
-class SocialMediaSeeder extends Seeder {
+class SocialMediasSeeder extends Seeder {
 
 	public function run()
 	{
@@ -76,5 +77,18 @@ class SocialMediaSeeder extends Seeder {
 			"name" => "Youtube",
 			"pattern" => "https://www.youtube.com/user/{account}"
 		));
+	}
+}
+
+class TeenahAppsTableSeeder extends Seeder {
+
+	public function run()
+	{
+		TeenahApp::create(
+			array(
+				"id" => 1,
+				"email" => "teenah.app@gmail.com",
+			)
+		);
 	}
 }

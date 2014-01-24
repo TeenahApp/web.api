@@ -19,20 +19,7 @@ Event::listen("illuminate.query", function($sql){
 
 // Route::filter();
 
-/*
-Route::get("api/keys/generate", function()
-{
-	$api_key = Str::random(30);
-	$api_secret = Hash::make($api_key); // With probably mobile and time.
-
-	return Response::json(array(
-		"api_key" => $api_key,
-		"api_secret" => $api_secret
-	), 200);
-});
-*/
-
-Route::group(array("prefix" => "api/v1"), function()
+Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
 {
 	// Get the first factor to sign in.
 	Route::get("users/token/{mobile}", "UsersController@tokenize")->where("mobile", "[0-9]+");

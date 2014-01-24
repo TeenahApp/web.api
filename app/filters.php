@@ -79,6 +79,33 @@ Route::filter('csrf', function()
 	}
 });
 
+Route::filter("app.auth", function(){
+
+	$app_key = Request::header("X-App-Key");
+	$app_secret = Request::header("X-App-Secret");
+
+	if (is_null($app_key) || is_null($app_secret))
+	{
+		return Response::json(array(
+			"message" => "An API key and/or secret were either not sent or invalid."
+		), 401);
+	}
+
+	// Check if the app credentials are there.
+	$teenah_app = TeenahApp::where("app_key", "=", $app_key)->where("app_secret", "=", $app_secret)->where("active", "=", "1")->first();
+
+	if (is_null($teenah_app))
+	{
+		return Response::json(array(
+			"message" => "An API key and/or secret were either not sent or invalid."
+		), 401);
+	}
+
+	// Otherwise, everything is fine and dandy.
+	// Call the desired controller.
+
+});
+
 Route::filter("user.auth", function(){
 
 	// Get the user token.

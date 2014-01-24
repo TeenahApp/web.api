@@ -22,8 +22,8 @@ class AutoCompletesController extends \Controller {
 			), 400);
 		}
 
-		// TODO: It should not be hard-coded.
-		$companies = JobCompany::where("name", "LIKE", "%$query%")->limit(10)->get()->toArray();
+		// Done.
+		$companies = JobCompany::where("name", "LIKE", "%$query%")->limit(Config::get("teenah.autocomplete.max_records"))->get()->toArray();
 
 		return Response::json($companies, 200);
 	}
@@ -48,8 +48,8 @@ class AutoCompletesController extends \Controller {
 			), 400);
 		}
 
-		// TODO: It should not be hard-coded.
-		$majors = EducationMajor::where("name", "LIKE", "%$query%")->limit(10)->get()->toArray();
+		// Done.
+		$majors = EducationMajor::where("name", "LIKE", "%$query%")->limit(Config::get("teenah.autocomplete.max_records"))->get()->toArray();
 
 		return Response::json($majors, 200);
 	}
