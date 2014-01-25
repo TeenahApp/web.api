@@ -267,7 +267,7 @@ class MembersController extends \Controller {
 
 		// Done.
 		return Response::json(array(
-			"url" => $photo_url
+			"url" => $media->url
 		), 200);
 	}
 

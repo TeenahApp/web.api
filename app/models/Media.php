@@ -36,30 +36,51 @@ class Media extends Eloquent {
 			return null;
 		}
 
+		$content_type = "application/octet-stream";
+
+		// Set the content type.
+		switch ($extension)
+		{
+			case "jpg" : case "png" : case "jpeg" : case "gif":
+				$content_type = "image/{$extension}";
+			break; 
+		}
+
 		// TODO: Check if the file is really a valid file; not a malware.
 
 		// Set the file fullname.
-		$output_filename = "uploads/" . str_random(40) . ".{$extension}";
-		$output_full_filename = public_path() . "/" . $output_filename;
+		$filename = str_random(40) . ".{$extension}";
 
 		// Save the decoded base64 of the file (image).
-		$file_contents = base64_decode($data);
-		$file_saving = File::put($output_full_filename, $file_contents);
+		$body = base64_decode($data);
 
-		if ($file_saving == 0)
+		// Initialize S3 object.
+		$s3 = AWS::get("s3");
+
+		$object = $s3->putObject(
+			array(
+    			"Bucket"      => Config::get("aws::bucket"),
+    			"Key"         => $filename,
+    			"Body"        => $body,
+    			"ACL"         => "public-read",
+    			"ContentType" => $content_type
+			)
+		);
+
+		// Check if the object has been put successfully.
+		if (is_null($object))
 		{
 			return null;
 		}
 
 		// Make a unique hash.
-		$signature = Hash::make($file_contents);
+		$signature = Hash::make($body);
 
 		// TODO: Try to get a taste of the uploaded file.
 		// Meaning: A thumb for the photo.
 
 		// Set the photo with the url.
-		// TODO: URL should be under https protocol.
-		$media_url = asset($output_filename);
+		$media_url = $object["ObjectURL"];
 
 		// Create this media.
 		return self::create(array(
