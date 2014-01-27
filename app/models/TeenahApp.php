@@ -14,7 +14,7 @@ class TeenahApp extends Eloquent {
 		$attributes["app_key"] = $key;
 		$attributes["app_secret"] = $secret;
 
-		parent::create($attributes);
+		return parent::create($attributes);
 	}
 
 }

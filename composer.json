@@ -6,7 +6,8 @@
 	"require": {
 		"laravel/framework": "4.1.*",
 		"way/generators": "dev-master",
-		"aws/aws-sdk-php-laravel": "1.*"
+		"aws/aws-sdk-php-laravel": "1.*",
+		"travisjryan/twilio": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

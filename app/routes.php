@@ -17,7 +17,11 @@ Event::listen("illuminate.query", function($sql){
 });
 */
 
-// Route::filter();
+Route::group(array("prefix" => "api/v1"), function(){
+
+	Route::get("apps/make/{email}", "TeenahAppsController@make");
+
+});
 
 Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
 {
@@ -182,22 +186,5 @@ Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
 
 	// Auto-complete majors.
 	Route::get("majors/autocomplete/{query}", array("before" => "user.auth", "uses" => "AutoCompletesController@majors"));
-
-});
-
-Route::get("s3", function(){
-
-	$s3 = AWS::get('s3');
-
-	$result = $s3->putObject(
-		array(
-    		'Bucket'     => Config::get("aws::bucket"),
-    		'Key'        => Str::random(20),
-    		'Body'       => 'Hello World.',
-    		'ACL'        => 'public-read'
-		)
-	);
-
-	print_r($result["ObjectURL"]);
 
 });

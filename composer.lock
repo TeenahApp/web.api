@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a0fbc17349ad2e3b5094ea2151b425bd",
+    "hash": "b7a799c8dd9d43a3999454c8572e60c7",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1798,6 +1798,101 @@
             "time": "2014-01-24 14:36:08"
         },
         {
+            "name": "travisjryan/twilio",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/travisjryan/laravel4-twilio.git",
+                "reference": "2f704acff6e1575f59c06e317654a68da91e18af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/travisjryan/laravel4-twilio/zipball/2f704acff6e1575f59c06e317654a68da91e18af",
+                "reference": "2f704acff6e1575f59c06e317654a68da91e18af",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "4.1.x",
+                "php": ">=5.3.0",
+                "twilio/sdk": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Travisjryan\\Twilio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Travis J Ryan",
+                    "email": "travisjryan@gmail.com"
+                }
+            ],
+            "description": "Twilio API for Laravel 4",
+            "homepage": "https://github.com/travisjryan/laravel4-twilio",
+            "keywords": [
+                "ivr",
+                "laravel4",
+                "sms",
+                "twilio"
+            ],
+            "time": "2013-12-21 23:55:13"
+        },
+        {
+            "name": "twilio/sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "30d14133d0f796c37775d38960ad8ede9113e1bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/30d14133d0f796c37775d38960ad8ede9113e1bf",
+                "reference": "30d14133d0f796c37775d38960ad8ede9113e1bf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "mockery/mockery": ">=0.7.2",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Services_Twilio": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Burke",
+                    "email": "kevin@twilio.com"
+                },
+                {
+                    "name": "Kyle Conroy",
+                    "email": "kyle+pear@twilio.com"
+                }
+            ],
+            "description": "A PHP wrapper for Twilio's API",
+            "homepage": "http://github.com/twilio/twilio-php",
+            "keywords": [
+                "api",
+                "sms",
+                "twilio"
+            ],
+            "time": "2014-01-21 17:28:35"
+        },
+        {
             "name": "way/generators",
             "version": "dev-master",
             "source": {
@@ -1861,7 +1956,8 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "way/generators": 20
+        "way/generators": 20,
+        "travisjryan/twilio": 20
     },
     "platform": [
 
