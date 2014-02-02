@@ -37,6 +37,9 @@ Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
 	// Initial login for the user, there must be a member related to.
 	Route::post("users/members", array("before" => "user.auth", "uses" => "UsersController@initialize"));
 
+	// Get the dashboard of the current user.
+	Route::get("users/dashboard", array("before" => "user.auth", "uses" => "UsersController@dashboard"));
+
 	// Get the member that is selected.
 	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("id", "[0-9]+");
 
@@ -177,9 +180,6 @@ Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
 
 	// Deactivate a trustee.
 	Route::get("trustees/{id}/deactivate", array("before" => "user.auth", "uses" => "TrusteesController@deactivate"))->where("id", "[0-9]+");
-
-	// Get the dashboard of the current user.
-	Route::get("users/dashboard", array("before" => "user.auth", "uses" => "UsersController@dashboard"));
 
 	// Auto-complete companies.
 	Route::get("companies/autocomplete/{query}", array("before" => "user.auth", "uses" => "AutoCompletesController@companies"));

@@ -2,49 +2,6 @@
 
 class UsersController extends \Controller {
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-		//print "helloworld";
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
 
 	// TODO: Do not login in a user that already logged in.
 	public function tokenize($mobile)
@@ -55,6 +12,22 @@ class UsersController extends \Controller {
 			return Response::json(array(
 				"message" => "Not authorized to access this resource."
 			), 403);
+		}
+
+		$validator = Validator::make(
+			array(
+				"mobile" => $mobile
+			),
+			array(
+				"mobile" => "required|min:10"
+			)
+		);
+
+		if ($validator->fails())
+		{
+			return Response::json(array(
+				"message" => "Bad request."
+			), 400);
 		}
 
 		// Check if there is a user with the entered mobile number.
@@ -72,13 +45,14 @@ class UsersController extends \Controller {
 		// Save the token within the session.
 		Session::put("sms_token", $sms_token);
 
-		// Everything is okay.
-		// TODO: This should be like:
-		//return Response::json("", 204);
+		$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
+		$text = "السلام عليكم، حيّاك الله في تينه\n\nكلمة المرور المؤقتة: $sms_token";
 
-		return Response::json(array(
-			"sms_token" => $sms_token
-		), 200);
+		// Send the message.
+		$sms->send($mobile, $text);
+
+		// Everything is okay.
+		return Response::json("", 204);
 	}
 
 	public function login()
@@ -135,12 +109,12 @@ class UsersController extends \Controller {
 		Session::forget("sms_token");
 
 		// Initially, the user has no member related to.
-		$has_member = false;
+		$member_id = 0;
 		$found_member = Member::where("mobile", "=", Input::get("mobile"))->first();
 
 		if (!is_null($found_member))
 		{
-			$has_member = true;
+			$member_id = $found_member->id;
 			$user->member_id = $found_member->id;
 
 			// TODO: Update the fullname for the member.
@@ -158,7 +132,7 @@ class UsersController extends \Controller {
 		// TODO: Return dashboard if the user has a member.
 		return Response::json(array(
 			"user_token" => $user_token,
-			"has_member" => $has_member
+			"member_id" => $member_id
 		), 200);
 	}
 
