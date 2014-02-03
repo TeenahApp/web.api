@@ -75,7 +75,7 @@ class TrusteesController extends \Controller {
 		}
 
 		// Everything else is okay.
-		Trustee::create(array(
+		Trustee::insert(array(
 			"member_id" => $user->member_id,
 			"trustee_id" => Input::get("id")
 		));
