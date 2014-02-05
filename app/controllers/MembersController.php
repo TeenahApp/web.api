@@ -93,7 +93,7 @@ class MembersController extends \Controller {
 				"dob" => "date",
 				"dod" => "date",
 				"email" => "email",
-				"marital_status" => "in:single,married,divorced,widow"
+				"marital_status" => "required|in:single,married,divorced,widow"
 			)
 		);
 
