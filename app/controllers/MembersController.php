@@ -100,8 +100,8 @@ class MembersController extends \Controller {
 		if ($validator->fails())
 		{
 			return Response::json(array(
-				"message" => "Not authorized to use this resource."
-			), 403);
+				"message" => "Bad request."
+			), 400);
 		}
 
 		// Get the chosen member.
