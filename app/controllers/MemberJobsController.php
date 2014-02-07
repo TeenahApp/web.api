@@ -195,7 +195,6 @@ class MemberJobsController extends \Controller {
 
 		if ($validator->fails())
 		{
-			return $validator->messages();
 			return Response::json(array(
 				"message" => "Bad request."
 			), 400);
