@@ -98,7 +98,7 @@ class Circle extends Eloquent {
 
 		// Companies.
 		// companies.
-		$stats["companies"] = MemberJob::whereIn("member_id", $circle_members)->where("status", "=", "ongoing")->groupBy("company_id")->select(array(DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->with("comapny")->get()->toArray();
+		$stats["companies"] = MemberJob::whereIn("member_id", $circle_members)->where("status", "=", "ongoing")->groupBy("company_id")->select(array(DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->with("company")->get()->toArray();
 
 		// Jobs.
 		// jobs.
