@@ -38,7 +38,7 @@ class EventsController extends \Controller {
 		//
 		$user = User::current();
 
-		// title, start_datetime, finish_datetime, location, latitude, longtitude, circles
+		// title, start_datetime, finish_datetime, location, latitude, longitude, circles
 		$validator = Validator::make(
 			array(
 				"title" => Input::get("title"),
@@ -46,7 +46,7 @@ class EventsController extends \Controller {
 				"finish_datetime" => Input::get("finish_datetime"),
 				"location" => Input::get("location"),
 				"latitude" => Input::get("latitude"),
-				"longtitude" => Input::get("longtitude"),
+				"longitude" => Input::get("longitude"),
 				"circles" => Input::get("circles")
 			),
 			array(
@@ -55,7 +55,7 @@ class EventsController extends \Controller {
 				"finish_datetime" => "required|date",
 				"location" => "required",
 				"latitude" => "regex:/\d+\.\d+/",
-				"longtitude" => "regex:/\d+\.\d+/",
+				"longitude" => "regex:/\d+\.\d+/",
 				"circles" => "required|regex:/\[(\d)+(,\d+)*\]/"
 			)
 		);
@@ -86,7 +86,7 @@ class EventsController extends \Controller {
 			"finish_datetime" => Input::get("finish_datetime"),
 			"location" => Input::get("location"),
 			"latitude" => Input::get("latitude"),
-			"longtitude" => Input::get("longtitude"),
+			"longitude" => Input::get("longitude"),
 			"created_by" => $user->member_id
 		));
 
@@ -188,7 +188,7 @@ class EventsController extends \Controller {
 				"finish_datetime" => Input::get("finish_datetime"),
 				"location" => Input::get("location"),
 				"latitude" => Input::get("latitude"),
-				"longtitude" => Input::get("longtitude")
+				"longitude" => Input::get("longitude")
 			),
 			array(
 				"title" => "required",
@@ -196,7 +196,7 @@ class EventsController extends \Controller {
 				"finish_datetime" => "required|date",
 				"location" => "required",
 				"latitude" => "regex:/\d+\.\d+/",
-				"longtitude" => "regex:/\d+\.\d+/"
+				"longitude" => "regex:/\d+\.\d+/"
 			)
 		);
 
@@ -231,7 +231,7 @@ class EventsController extends \Controller {
 			"finish_datetime" => Input::get("finish_datetime"),
 			"location" => Input::get("location"),
 			"latitude" => Input::get("latitude"),
-			"longtitude" => Input::get("longtitude")
+			"longitude" => Input::get("longitude")
 		));
 
 		// Done.

@@ -19,7 +19,7 @@ class CreateEventsTable extends Migration {
 			$table->datetime("finish_datetime");
 			$table->string("location")->nullable();
 			$table->double("latitude")->nullable();
-			$table->double("longtitude")->nullable();
+			$table->double("longitude")->nullable();
 			$table->bigInteger("created_by");
 			$table->timestamps();
 		});

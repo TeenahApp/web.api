@@ -49,11 +49,6 @@ class ActionsController extends \Controller {
 		return Response::json("", 204);
 	}
 
-	public function likeEventComment($event_id, $comment_id)
-	{
-		
-	}
-
 	// Like an event.
 	public function likeEvent($id)
 	{
