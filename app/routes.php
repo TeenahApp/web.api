@@ -11,19 +11,13 @@
 |
 */
 
-/*
-Event::listen("illuminate.query", function($sql){
-	echo "$sql\n";
-});
-*/
-
-Route::group(array("prefix" => "api/v1"), function(){
+Route::group(array("prefix" => "v1"), function(){
 
 	Route::get("apps/make/{email}", "TeenahAppsController@make");
 
 });
 
-Route::group(array("prefix" => "api/v1", "before" => "app.auth"), function()
+Route::group(array("prefix" => "v1", "before" => "app.auth"), function()
 {
 	// Get the first factor to sign in.
 	Route::get("users/token/{mobile}", "UsersController@tokenize")->where("mobile", "[0-9]+");
