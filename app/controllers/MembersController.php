@@ -51,7 +51,12 @@ class MembersController extends \Controller {
 		}
 
 		// Get the member if exists.
-		$member = Member::with("jobs")->with("educations")->find($id);
+		//$member = Member::with("jobs")->with("educations")->find($id);
+		// Fixed an issue with displaying inner relations to this member.
+
+		$member = Member::with("jobs")->with("educations")->with(array("inRelations" => function($query){
+			$query->with("firstMember");
+		}))->find($id);
 
 		if (is_null($member))
 		{

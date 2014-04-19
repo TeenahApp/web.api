@@ -1,8 +1,6 @@
-<IfModule mod_rewrite.c>
-    Options -MultiViews
-    RewriteEngine On
+Options +FollowSymLinks
+RewriteEngine On
 
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-</IfModule>
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]

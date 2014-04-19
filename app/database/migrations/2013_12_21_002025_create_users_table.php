@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration {
 			$table->string("token");
 			$table->string("email")->unique()->nullable();
 			$table->boolean("active")->default(1);
-			$table->datetime("last_time_tokenized");
+			$table->datetime("last_time_tokenized")->default("0000-00-00");
 			$table->timestamps();
 		});
 	}
