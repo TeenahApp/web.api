@@ -4,7 +4,7 @@ class Member extends Eloquent {
 
 	protected $table = "members";
 	protected $guarded = array();
-	protected $appends = array("social_medias", "updates_count");
+	protected $appends = array("social_medias", "updates_count", "views_count", "likes_count", "comments_count", "medias_count");
 
 	public function user()
 	{
@@ -34,7 +34,7 @@ class Member extends Eloquent {
 
 	public function educations()
 	{
-		return $this->hasMany("MemberEducation");
+		return $this->hasMany("MemberEducation")->with("major");
 	}
 
 	// TODO: Check the foregin keys.
@@ -46,7 +46,7 @@ class Member extends Eloquent {
 
 	public function jobs()
 	{
-		return $this->hasMany("MemberJob");
+		return $this->hasMany("MemberJob")->with("company");
 	}
 
 	// TODO: Check if this method is needed too.
@@ -269,5 +269,25 @@ class Member extends Eloquent {
 		return self::with(array("inRelations" => function($query){
 			$query->with("firstMember");
 		}))->find($id);
+	}
+
+	public function getViewsCountAttribute()
+	{
+		return Action::calculate("view", "member", $this->id);
+	}
+
+	public function getLikesCountAttribute()
+	{
+		return Action::calculate("like", "member", $this->id);
+	}
+
+	public function getCommentsCountAttribute()
+	{
+		return Action::calculate("comment", "member", $this->id);
+	}
+
+	public function getMediasCountAttribute()
+	{
+		return Media::where("created_by", "=", $this->id)->count();
 	}
 }

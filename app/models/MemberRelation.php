@@ -112,6 +112,16 @@ class MemberRelation extends Eloquent {
 		}
 
 		// Do some checks to decide best inverse relation.
+		if ($relation == "husband")
+		{
+			return "wife";
+		}
+
+		if ($relation == "wife")
+		{
+			return "husband";
+		}
+
 		if ($relation == "father" || $relation == "mother")
 		{
 			return $child;

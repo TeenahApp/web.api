@@ -4,7 +4,7 @@ class TEvent extends Eloquent {
 
 	protected $table = "events";
 	protected $guarded = array();
-	protected $appends = array("views_count", "likes_count", "comments_count");
+	protected $appends = array("views_count", "likes_count", "comments_count", "comings_count");
 
 	public function creator()
 	{
@@ -46,5 +46,10 @@ class TEvent extends Eloquent {
 	public function getCommentsCountAttribute()
 	{
 		return Action::calculate("comment", "event", $this->id);
+	}
+
+	public function getComingsCountAttribute()
+	{
+		return CircleEventMember::where("event_id", "=", $this->id)->where("decision", "=", "willcome")->count();
 	}
 }

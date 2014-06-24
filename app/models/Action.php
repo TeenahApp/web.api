@@ -99,4 +99,10 @@ class Action extends Eloquent {
 	{
 		return Action::where("area", "=", $area)->where("action", "=", $action)->where("affected_id", "=", $affected_id)->count();
 	}
+
+	// Create a method to get actions.
+	public static function get($action, $area, $affected_id)
+	{
+		return Action::with("creator")->where("area", "=", $area)->where("action", "=", $action)->where("affected_id", "=", $affected_id)->get();
+	}
 }

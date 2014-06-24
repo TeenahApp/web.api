@@ -95,6 +95,10 @@ class MemberCirclesController extends \Controller {
 			));
 		}
 
+		// Update and save.
+		$circle_members_count = MemberCircle::where("circle_id", "=", $id)->count();
+		Circle::find($id)->update(array("members_count" => $circle_members_count));
+
 		// Done.
 		return Response::json(array(
 			"message" => "Members have been added to the circle successfully."

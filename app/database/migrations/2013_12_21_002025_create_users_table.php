@@ -14,9 +14,9 @@ class CreateUsersTable extends Migration {
 		//
 		Schema::create("users", function($table){
 			$table->bigIncrements("id");
-			$table->bigInteger("member_id");
+			$table->bigInteger("member_id")->default(0);
 			$table->string("mobile")->unique();
-			$table->string("token");
+			$table->string("token")->nullable();
 			$table->string("email")->unique()->nullable();
 			$table->boolean("active")->default(1);
 			$table->datetime("last_time_tokenized")->default("0000-00-00");

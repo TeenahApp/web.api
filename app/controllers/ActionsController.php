@@ -49,21 +49,6 @@ class ActionsController extends \Controller {
 		return Response::json("", 204);
 	}
 
-	// Like an event.
-	public function likeEvent($id)
-	{
-		$result = Action::like("event", $id);
-
-		if ($result == false)
-		{
-			return Response::json(array(
-				"message" => "Not authorized to use this resource."
-			), 403);
-		}
-
-		return Response::json("", 204);
-	}
-
 	// Like a member.
 	public function likeMember($id)
 	{

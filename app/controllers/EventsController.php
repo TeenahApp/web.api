@@ -28,6 +28,26 @@ class EventsController extends \Controller {
 		return array_fetch($events->toArray(), "event");
 	}
 
+	public function get()
+	{
+		//
+		$user = User::current();
+
+		$member_circles = array_fetch($user->member->circles()->get(), "id");
+
+		if (count($member_circles) == 0)
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		$events = CircleEventMember::with("event")->where("member_id", "=", $user->member_id)->whereIn("circle_id", $member_circles)->get();
+
+		// Done.
+		return array_fetch($events->toArray(), "event");
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -62,6 +82,9 @@ class EventsController extends \Controller {
 
 		if ($validator->fails())
 		{
+			echo "Happend";
+			var_dump($validator->failed());
+
 			return Response::json(array(
 				"message" => "Bad request."
 			), 400);
@@ -157,8 +180,13 @@ class EventsController extends \Controller {
 
 		// TODO: Get the circle(s) that is/are invited to the event with the member(s).
 		$event = TEvent::with("creator")->with("members")->with("medias")->find($id);
+		
 		//$cem_circles = CircleEventMember::where("event_id", "=", $event->id)->whereIn("circle_id", $member_circles)->groupBy("circle_id")->with("circle")->get();//, "circle");
 		//dd($cem_circles);
+
+		// Check if the current member liked the comment.
+		$member_likes_count = Action::where("area", "=", "event")->where("action", "=", "like")->where("affected_id", "=", $event->id)->where("created_by", "=", $user->member_id)->count();
+		$event->has_liked = ($member_likes_count > 0) ? 1 : 0;
 
 		// Make an action for the logged in user (member); specifically "view".
 		Action::view("event", $event->id);
@@ -351,6 +379,29 @@ class EventsController extends \Controller {
 		return Response::json(array(
 			"decision" => $invitation_found->decision
 		), 200);
+	}
+
+	public function getComments($event_id)
+	{
+		$user = User::current();
+
+		// TODO: Check if the user is able to access this resource.
+
+		$comments = Action::get("comment", "event", $event_id);
+
+		// Get the likes of the event.
+		$comments->each(function($comment) use ($user)
+		{
+			$likes_count = Action::calculate("like", "event_comment", $comment->id);
+
+			// Check if the current member liked the comment.
+			$member_likes_count = Action::where("area", "=", "event_comment")->where("action", "=", "like")->where("affected_id", "=", $comment->id)->where("created_by", "=", $user->member_id)->count();
+
+			$comment->likes_count = $likes_count;
+			$comment->has_liked = ($member_likes_count > 0) ? 1 : 0;
+		});
+
+		return $comments;
 	}
 
 }

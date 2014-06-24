@@ -118,7 +118,7 @@ class Message extends Eloquent {
 			{
 				// Deliver this message to the member.
 				// TODO: I don't know may be make sure that everybody is receiving the message.
-				CircleMessageMember::broadcast($circle, $message_id, $member->id);
+				CircleMessageMember::broadcast($circle, $message_id, $member->member_id);
 			}
 		}
 

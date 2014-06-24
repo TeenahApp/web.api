@@ -22,7 +22,7 @@ class Circle extends Eloquent {
 	}
 
 	// Get the circle stats.
-	public static function stats($circle_members)
+	public static function stats($id, $circle_members)
 	{
 		// Members.
 		
@@ -98,7 +98,7 @@ class Circle extends Eloquent {
 
 		// Companies.
 		// companies.
-		$stats["companies"] = MemberJob::whereIn("member_id", $circle_members)->where("status", "=", "ongoing")->groupBy("company_id")->select(array(DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->with("company")->get()->toArray();
+		$stats["companies"] = MemberJob::whereIn("member_id", $circle_members)->where("status", "=", "ongoing")->groupBy("company_id")->select(array(DB::raw("count(*) AS members_count"), "company_id"))->with("company")->orderBy("members_count", "DESC")->get()->toArray();
 
 		// Jobs.
 		// jobs.
@@ -106,11 +106,13 @@ class Circle extends Eloquent {
 
 		// Events.
 		// event_count.
-		$stats["event_count"] = CircleEventMember::whereIn("member_id", $circle_members)->distinct("event_id")->count();
+		$events_count = DB::table("circle_event_members")->select(DB::raw("count(distinct(`event_id`)) AS aggregate"))->where("circle_id", "=", $id)->first();
+		$stats["events_count"] = $events_count->aggregate;
 
 		// Messages.
 		// messages_count.
-		$stats["messages_count"] = CircleMessageMember::whereIn("member_id", $circle_members)->distinct("message_id")->count();
+		$messages_count = DB::table("circle_message_members")->select(DB::raw("count(distinct(`message_id`)) AS aggregate"))->where("circle_id", "=", $id)->first();
+		$stats["messages_count"] = $messages_count->aggregate;
 
 		// TODO: Medias.
 		// medias_count.
@@ -118,10 +120,10 @@ class Circle extends Eloquent {
 
 		// Names.
 		// male_names.
-		$stats["male_names"] = Member::whereIn("id", $circle_members)->where("gender", "=", "male")->groupBy("name")->select(array("name", DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->get()->toArray();
+		$stats["male_names"] = Member::whereIn("id", $circle_members)->where("gender", "=", "male")->groupBy("name")->select(array("name", DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->take(5)->get()->toArray();
 
 		// female_names.
-		$stats["female_names"] = Member::whereIn("id", $circle_members)->where("gender", "=", "female")->groupBy("name")->select(array("name", DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->get()->toArray();
+		$stats["female_names"] = Member::whereIn("id", $circle_members)->where("gender", "=", "female")->groupBy("name")->select(array("name", DB::raw("count(*) AS members_count")))->orderBy("members_count", "DESC")->take(5)->get()->toArray();
 
 		// Locations.
 		// locations.

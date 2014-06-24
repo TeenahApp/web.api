@@ -11,6 +11,16 @@
 |
 */
 
+
+// Event::listen("illuminate.query", function($sql, $bindings)
+// {
+// 	$sql = str_replace(array('%', '?'), array('%%', '%s'), $sql);
+// 	$full_sql = vsprintf($sql, $bindings);
+
+// 	//echo "$full_sql\n\n";
+// 	Log::error("$full_sql\n\n");
+// });
+
 Route::group(array("prefix" => "v1"), function(){
 
 	Route::get("apps/make/{email}", "TeenahAppsController@make");
@@ -36,6 +46,9 @@ Route::group(array("prefix" => "v1", "before" => "app.auth"), function()
 
 	// Get the member that is selected.
 	Route::get("members/{id}", array("before" => "user.auth", "uses" => "MembersController@show"))->where("id", "[0-9]+");
+
+	// Get the member by his/her mobile.
+	Route::get("mobiles/{mobile}/member", array("before" => "user.auth", "uses" => "MembersController@getMemberByMobile"))->where("mobile", "[0-9]+");
 
 	// Update the member information.
 	Route::put("members/{id}", array("before" => "user.auth", "uses" => "MembersController@update"))->where("id", "[0-9]+");
@@ -94,6 +107,9 @@ Route::group(array("prefix" => "v1", "before" => "app.auth"), function()
 	// Get the events of a circle.
 	Route::get("circles/{id}/stats", array("before" => "user.auth", "uses" => "CirclesController@stats"))->where("id", "[0-9]+");
 
+	// Get the events of a member.
+	Route::get("events", array("before" => "user.auth", "uses" => "EventsController@get"));
+
 	// Create an event.
 	Route::post("events", array("before" => "user.auth", "uses" => "EventsController@store"));
 
@@ -121,17 +137,29 @@ Route::group(array("prefix" => "v1", "before" => "app.auth"), function()
 	// Comment on an event.
 	Route::post("events/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentEvent"))->where("id", "[0-9]+");
 
+	// Get the comments on event.
+	Route::get("events/{id}/comments", array("before" => "user.auth", "uses" => "EventsController@getComments"))->where("id", "[0-9]+");
+
 	// Like a member.
 	Route::get("members/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMember"))->where("id", "[0-9]+");
 
 	// Comment on a member.
 	Route::post("members/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentMember"))->where("id", "[0-9]+");
 
+	// Get the comments on media.
+	Route::get("members/{id}/comments", array("before" => "user.auth", "uses" => "MembersController@getComments"))->where("id", "[0-9]+");
+
+	// Get a media.
+	Route::get("medias/{id}", array("before" => "user.auth", "uses" => "MediasController@show"))->where("id", "[0-9]+");
+
 	// Like a media.
 	Route::get("medias/{id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMedia"))->where("id", "[0-9]+");
 	
 	// Comment on a media.
 	Route::post("medias/{id}/comment", array("before" => "user.auth", "uses" => "ActionsController@commentMedia"))->where("id", "[0-9]+");
+
+	// Get the comments on media.
+	Route::get("medias/{id}/comments", array("before" => "user.auth", "uses" => "MediasController@getComments"))->where("id", "[0-9]+");
 
 	// Like a comment on a member.
 	Route::get("members/{member_id}/comments/{comment_id}/like", array("before" => "user.auth", "uses" => "ActionsController@likeMemberComment"));
@@ -148,8 +176,11 @@ Route::group(array("prefix" => "v1", "before" => "app.auth"), function()
 	// Send a media to a circle or a group of circles.
 	Route::put("messages/medias", array("before" => "user.auth", "uses" => "MessagesController@sendMedia"));
 
+	// Get the latest read messages.
+	Route::get("circles/{id}/messages/read", array("before" => "user.auth", "uses" => "MessagesController@getLatestRead"))->where("id", "[0-9]+");
+
 	// Fetch the unread messages.
-	Route::get("circles/{id}/messages", array("before" => "user.auth", "uses" => "MessagesController@fetch"))->where("id", "[0-9]+");
+	Route::get("circles/{id}/messages/unread", array("before" => "user.auth", "uses" => "MessagesController@getLatestUnread"))->where("id", "[0-9]+");
 
 	// Get the social medias of the member.
 	Route::get("members/{member_id}/socialmedias", array("before" => "user.auth", "uses" => "MemberSocialMediasController@index"))->where("member_id", "[0-9]+");

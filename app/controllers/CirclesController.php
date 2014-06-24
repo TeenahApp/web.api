@@ -43,29 +43,44 @@ class CirclesController extends \Controller {
 				{
 					// Create a new circle containing this member and relations.
 					$best_circle = Circle::create(array(
-						"name" => str_random(20),
+						"name" => "الأهل",//str_random(10),
 						"created_by" => $user->member_id
 					));
 				}
-				
-				// Add this member to the best circle.
-				MemberCircle::create(array(
-					"member_id" => $user->member_id,
-					"circle_id" => $best_circle->id
-				));
-
-				// Add relations to the best circle.
-				foreach ($relations as $relation)
+				else
 				{
+					$best_circle->id = $best_circle->circle_id;
+				}
+
+				// If not already added, do add.
+				$member_circle_found = MemberCircle::where("member_id", "=", $user->member_id)->where("circle_id", "=", $best_circle->id)->count();
+
+				if ($member_circle_found == 0)
+				{
+					// Add this member to the best circle.
 					MemberCircle::create(array(
-						"member_id" => $relation->member_b,
+						"member_id" => $user->member_id,
 						"circle_id" => $best_circle->id
 					));
 				}
 
+				// Add relations to the best circle.
+				foreach ($relations as $relation)
+				{
+					$related_member_circle_found = MemberCircle::where("member_id", "=", $relation->member_b)->where("circle_id", "=", $best_circle->id)->count();
+
+					if ($related_member_circle_found == 0)
+					{
+						MemberCircle::create(array(
+							"member_id" => $relation->member_b,
+							"circle_id" => $best_circle->id
+						));
+					}
+				}
+
 				// Update and save.
-				$best_circle->members_count	= 1 + count($relations);
-				$best_circle->save();
+				$circle_members_count = MemberCircle::where("circle_id", "=", $best_circle->id)->count();
+				Circle::find($best_circle->id)->update(array("members_count" => $circle_members_count));
 			}
 		}
 
@@ -217,7 +232,7 @@ class CirclesController extends \Controller {
 		$circle_members = array_fetch(MemberCircle::where("circle_id", "=", $id)->select("member_id")->get()->toArray(), "member_id");
 
 		return Response::json(
-			Circle::stats($circle_members)
+			Circle::stats($id, $circle_members)
 		, 200);
 	}
 

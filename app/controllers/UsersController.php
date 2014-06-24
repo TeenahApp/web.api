@@ -6,6 +6,8 @@ class UsersController extends \Controller {
 	// TODO: Do not login in a user that already logged in.
 	public function tokenize($mobile)
 	{
+		//Session::forget("sms_token");
+
 		// Check if the user has already got SMS token.
 		if (Session::has("sms_token"))
 		{
@@ -40,7 +42,7 @@ class UsersController extends \Controller {
 		}
 
 		// Generate a random SMS token.
-		$sms_token = rand("11111", "99999");
+		$sms_token = rand("1111", "9999");
 
 		// Save the token within the session.
 		Session::put("sms_token", $sms_token);

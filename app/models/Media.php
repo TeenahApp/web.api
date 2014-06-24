@@ -5,6 +5,7 @@ class Media extends Eloquent {
 	protected $table = "medias";
 	protected $guarded = array();
 	protected $hidden = array("signature");
+	protected $appends = array("views_count", "likes_count", "comments_count");
 
 	public function creator()
 	{
@@ -89,5 +90,20 @@ class Media extends Eloquent {
 			"signature" => $signature,
 			"created_by" => $user->member_id
 		));
+	}
+
+	public function getViewsCountAttribute()
+	{
+		return Action::calculate("view", "media", $this->id);
+	}
+
+	public function getLikesCountAttribute()
+	{
+		return Action::calculate("like", "media", $this->id);
+	}
+
+	public function getCommentsCountAttribute()
+	{
+		return Action::calculate("comment", "media", $this->id);
 	}
 }

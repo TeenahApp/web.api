@@ -17,7 +17,7 @@ class CreateActionsTable extends Migration {
 			$table->enum("area", array("member", "event", "media", "member_comment", "event_comment", "media_comment"));
 			$table->enum("action", array("view", "comment", "like", "flag"));
 			$table->bigInteger("affected_id");
-			$table->string("content")->nullable();
+			$table->mediumtext("content")->nullable();
 			$table->bigInteger("created_by");
 			$table->timestamps();
 		});

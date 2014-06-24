@@ -102,7 +102,7 @@ class MessagesController extends \Controller {
 		return Response::json("", 204);
 	}
 
-	public function fetch($circle_id)
+	public function getLatestUnread($circle_id)
 	{
 		// Get the logged in user information.
 		$user = User::current();
@@ -118,11 +118,43 @@ class MessagesController extends \Controller {
 		}
 
 		// Get the messages that have not been read.
-		$query = CircleMessageMember::where("circle_id", "=", $circle_id)->where("member_id", "=", $user->member_id)->where("status", "!=", "read")->with("message");
-		$messages = $query->get();
+		$query = CircleMessageMember::where("circle_id", "=", $circle_id)
+									->where("member_id", "=", $user->member_id)
+									->where("status", "!=", "read");
+
+		$messages = $query->with(array("message" => function($nested_query){
+											$nested_query->with("creator");
+										}))->get();
 
 		// Update them as read.
 		$query->update(array("status" => "read"));
+
+		// Done.
+		return $messages;
+	}
+
+	public function getLatestRead($circle_id)
+	{
+		// Get the logged in user information.
+		$user = User::current();
+		
+		// Get the member circles.
+		$member_circles = array_fetch($user->member->circles()->get(), "id");
+		
+		if (!in_array($circle_id, $member_circles))
+		{
+			return Response::json(array(
+				"message" => "Not authorized to use this resource."
+			), 403);
+		}
+
+		// Get the messages that have not been read.
+		$messages = CircleMessageMember::where("circle_id", "=", $circle_id)
+										->where("member_id", "=", $user->member_id)
+										->where("status", "=", "read")
+										->with(array("message" => function($query){
+											$query->with("creator");
+										}))->limit(50)->get();
 
 		// Done.
 		return $messages;

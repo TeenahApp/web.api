@@ -65,6 +65,13 @@ class MembersController extends \Controller {
 			), 404);
 		}
 
+		// TODO: Check if the current member liked the comment.
+		$member_likes_count = Action::where("area", "=", "member")->where("action", "=", "like")->where("affected_id", "=", $member->id)->where("created_by", "=", $user->member_id)->count();
+		$member->has_liked = ($member_likes_count > 0) ? 1 : 0;
+
+		// Make an action for the logged in user (member); specifically "view".
+		Action::view("member", $member->id);
+
 		// Done.
 		return $member;
 	}
@@ -112,6 +119,10 @@ class MembersController extends \Controller {
 		// Get the chosen member.
 		$member = Member::find($id);
 
+		// Make dob and dod null.
+		$dob = Input::get("dob") ? : null;
+		$dod = Input::get("dod") ? : null;
+
 		if (is_null($member))
 		{
 			return Response::json(array(
@@ -121,9 +132,9 @@ class MembersController extends \Controller {
 
 		// Update the member.
 		$member->update(array(
-			"dob" => Input::get("dob"),
+			"dob" => $dob,
 			"pob" => Input::get("pob"),
-			"dod" => Input::get("dod"),
+			"dod" => $dod,
 			"pod" => Input::get("pod"),
 			"email" => Input::get("email"),
 			"marital_status" => Input::get("marital_status")
@@ -274,6 +285,43 @@ class MembersController extends \Controller {
 		return Response::json(array(
 			"url" => $media->url
 		), 200);
+	}
+
+	public function getComments($member_id)
+	{
+		$user = User::current();
+
+		// TODO: Check if the user is able to access this resource.
+
+		$comments = Action::get("comment", "member", $member_id);
+
+		// Get the likes of the event.
+		$comments->each(function($comment) use ($user)
+		{
+			$likes_count = Action::calculate("like", "member_comment", $comment->id);
+
+			// Check if the current member liked the comment.
+			$member_likes_count = Action::where("area", "=", "member_comment")->where("action", "=", "like")->where("affected_id", "=", $comment->id)->where("created_by", "=", $user->member_id)->count();
+
+			$comment->likes_count = $likes_count;
+			$comment->has_liked = ($member_likes_count > 0) ? 1 : 0;
+		});
+
+		return $comments;
+	}
+
+	public function getMemberByMobile($mobile)
+	{
+		$member = Member::where("mobile", "=", $mobile)->select(array("id", "name"))->first();
+
+		if ($member == null)
+		{
+			return Response::json(array(
+				"message" => "Member has not been found."
+			), 404);
+		}
+
+		return $member;
 	}
 
 }

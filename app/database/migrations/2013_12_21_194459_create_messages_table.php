@@ -15,7 +15,7 @@ class CreateMessagesTable extends Migration {
 		Schema::create("messages", function($table){
 			$table->bigIncrements("id");
 			$table->enum("category", array("text", "update"))->default("text"); // Update will accept HTML.
-			$table->mediumtext("content");
+			$table->mediumtext("content")->nullable();
 			$table->bigInteger("created_by");
 			$table->timestamps();
 		});
