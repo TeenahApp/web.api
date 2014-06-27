@@ -80,15 +80,15 @@ class SocialMediasSeeder extends Seeder {
 	}
 }
 
-class TeenahAppsTableSeeder extends Seeder {
+// class TeenahAppsTableSeeder extends Seeder {
 
-	public function run()
-	{
-		TeenahApp::create(
-			array(
-				"id" => 1,
-				"email" => "teenah.app@gmail.com",
-			)
-		);
-	}
-}
+// 	public function run()
+// 	{
+// 		TeenahApp::create(
+// 			array(
+// 				"id" => 1,
+// 				"email" => "teenah.app@gmail.com",
+// 			)
+// 		);
+// 	}
+// }
