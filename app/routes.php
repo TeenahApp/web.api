@@ -21,6 +21,16 @@
 // 	Log::error("$full_sql\n\n");
 // });
 
+App::before(function($request)
+{
+    if(!Request::secure())
+    {
+    	return Response::json(array(
+			"message" => "The API cannot be called by using HTTP, you may use HTTPS."
+		), 403);
+    }
+});
+
 Route::group(array("prefix" => "v1"), function(){
 
 	Route::get("apps/make/{email}", "TeenahAppsController@make");
