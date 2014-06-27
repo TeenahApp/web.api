@@ -11,9 +11,10 @@ class UsersController extends \Controller {
 		// Check if the user has already got SMS token.
 		if (Session::has("sms_token"))
 		{
-			return Response::json(array(
-				"message" => "Not authorized to access this resource."
-			), 403);
+			// return Response::json(array(
+			// 	"message" => "SMS verification code has been already sent."
+			// ), 403);
+			return Response::json("", 204);
 		}
 
 		$validator = Validator::make(

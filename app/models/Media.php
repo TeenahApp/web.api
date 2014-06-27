@@ -47,10 +47,11 @@ class Media extends Eloquent {
 			break; 
 		}
 
-		// TODO: Check if the file is really a valid file; not a malware.
+		// TODO: Scan the file is really a valid file; not a malware.
 
 		// Set the file fullname.
 		$filename = str_random(40) . ".{$extension}";
+		$taste_filename = str_random(40) . ".taste.{$extension}";
 
 		// Save the decoded base64 of the file (image).
 		$body = base64_decode($data);
@@ -79,14 +80,49 @@ class Media extends Eloquent {
 
 		// TODO: Try to get a taste of the uploaded file.
 		// Meaning: A thumb for the photo.
+		$temp_taste_name = tempnam("/tmp", "teenahapp");
+
+		// Save the contents on the file.
+		file_put_contents($temp_taste_name, $body);
+
+		$taste = Image::make($temp_taste_name);
+
+		$taste->resize(92, null, function($constraint){
+    		$constraint->aspectRatio();
+		});
+
+		$taste->save($temp_taste_name);
+
+		// Get the body of taste.
+		$taste_body = file_get_contents($temp_taste_name);
+
+		$taste_object = $s3->putObject(
+			array(
+    			"Bucket"      => Config::get("aws::bucket"),
+    			"Key"         => $taste_filename,
+    			"Body"        => $taste_body,
+    			"ACL"         => "public-read",
+    			"ContentType" => $content_type
+			)
+		);
+
+		// Check if the taste object has been put successfully.
+		if (is_null($taste_object))
+		{
+			return null;
+		}
+
+		// TODO: Remove the file.
 
 		// Set the photo with the url.
 		$media_url = $object["ObjectURL"];
+		$taste_url = $taste_object["ObjectURL"];
 
 		// Create this media.
 		return self::create(array(
 			"category" => $category,
 			"url" => $media_url,
+			"taste" => $taste_url,
 			"signature" => $signature,
 			"created_by" => $user->member_id
 		));

@@ -244,6 +244,7 @@ class MemberRelationsController extends \Controller {
 
 		if (Input::get("relation") == "son" || Input::get("relation") == "daughter")
 		{
+			// TODO: Children of father or mother are his/her brothers/sisters.
 			// Member A is a male, get the mother of the child and marry her.
 			if ($member_a->gender == "male")
 			{

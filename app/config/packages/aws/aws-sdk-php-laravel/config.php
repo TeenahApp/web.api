@@ -32,7 +32,7 @@ return array(
     |
     */
     'key'    => $_ENV["AWS_KEY"],
-    'secret' => $_ENV["AWS _SECRET"],
+    'secret' => $_ENV["AWS_SECRET"],
     'bucket' => $_ENV["AWS_BUCKET"],
 
     /*

@@ -13,7 +13,12 @@
 
 App::before(function($request)
 {
-	//
+	// if (!Request::secure())
+	// {
+	// 	return Response::json(array(
+	// 		"message" => "The API could only be called using HTTPS."
+	// 	), 403);
+	// }
 });
 
 

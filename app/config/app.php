@@ -109,6 +109,7 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'Aws\Laravel\AwsServiceProvider',
 		'Zee\Nexmo\NexmoServiceProvider',
+		'Intervention\Image\ImageServiceProvider',
 
 	),
 
@@ -177,6 +178,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 		'AWS'             => 'Aws\Laravel\AwsFacade',
 		'Nexmo'           => 'Zee\Nexmo\Facades\Nexmo',
+		'Image'           => 'Intervention\Image\Facades\Image',
 
 	),
 
