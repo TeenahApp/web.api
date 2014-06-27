@@ -56,6 +56,18 @@ App::error(function(Exception $exception, $code)
 	
 });
 
+// Fatal Errors.
+
+App::fatal(function($exception)
+{
+	Log::error($exception);
+
+	return Response::json(array(
+		"message" => "Service unavailable."
+	), 500);
+
+});
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler
