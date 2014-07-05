@@ -49,7 +49,7 @@ class UsersController extends \Controller {
 		Session::put("sms_token", $sms_token);
 
 		$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
-		$text = "السلام عليكم، حيّاك الله في تينه\n\nكلمة المرور المؤقتة: $sms_token";
+		$text = "تينه - كلمة المرور المؤقتة: $sms_token";
 
 		// Send the message.
 		$sms->send($mobile, $text);

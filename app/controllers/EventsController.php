@@ -38,7 +38,7 @@ class EventsController extends \Controller {
 		if (count($member_circles) == 0)
 		{
 			return Response::json(array(
-				"message" => "Not authorized to use this resource."
+				"message" => "You must at least sign up in one or more circle."
 			), 403);
 		}
 
