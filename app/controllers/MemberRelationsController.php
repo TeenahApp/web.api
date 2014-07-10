@@ -156,7 +156,7 @@ class MemberRelationsController extends \Controller {
 
 			$me_relation = ($member_a->gender == "male") ? "brother" : "sister";
 
-			foreach ($son_relation as $son_relations)
+			foreach ($son_relations as $son_relation)
 			{
 				// A is a brother to B.
 				$brother = new Member();
@@ -166,7 +166,7 @@ class MemberRelationsController extends \Controller {
 				MemberRelation::make($member_a, $brother, "brother");
 			}
 
-			foreach ($daughter_relation as $daughter_relations)
+			foreach ($daughter_relations as $daughter_relation)
 			{
 				// A is a sister to B.
 				$sister = new Member();
