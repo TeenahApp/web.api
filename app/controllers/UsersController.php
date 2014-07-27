@@ -48,11 +48,13 @@ class UsersController extends \Controller {
 		// Save the token within the session.
 		Session::put("sms_token", $sms_token);
 
-		$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
+		//$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
 		$text = "تينه - كلمة المرور المؤقتة: $sms_token";
 
 		// Send the message.
-		$sms->send($mobile, $text);
+		Sms::send(
+			array("to" => "+$mobile", "text" => $text)
+		);
 
 		// Everything is okay.
 		return Response::json("", 204);

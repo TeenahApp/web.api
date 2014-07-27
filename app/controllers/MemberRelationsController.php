@@ -134,11 +134,13 @@ class MemberRelationsController extends \Controller {
 			{
 				// TODO: Use queuing would be better.
 				// Send SMS asking new member to download app.
-				$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
+				//$sms = Nexmo::SMS(Config::get("nexmo::api_key"), Config::get("nexmo::api_secret"), Config::get("nexmo::sender"));
 				$text = "السلام عليكم، حيّاك الله،\n\n" . $logged_in_user->member->name . " يدعوك لتحميل تطبيق تينه و الانضمام إلى العائلة.";
 
 				// Send the message.
-				$sms->send($mobile, $text);
+				Sms::send(
+					array("to" => "+$mobile", "text" => $text)
+				);
 			}
 		}
 

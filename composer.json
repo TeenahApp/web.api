@@ -7,7 +7,8 @@
 		"laravel/framework": "4.1.*",
 		"way/generators": "dev-master",
 		"aws/aws-sdk-php-laravel": "1.*",
-		"intervention/image": "2.*"
+		"intervention/image": "2.*",
+		"twilio/laratwilio": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

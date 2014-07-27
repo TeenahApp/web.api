@@ -108,9 +108,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'Aws\Laravel\AwsServiceProvider',
-		'Zee\Nexmo\NexmoServiceProvider',
 		'Intervention\Image\ImageServiceProvider',
-
+		'Twilio\Laratwilio\LaratwilioServiceProvider'
 	),
 
 	/*
@@ -177,8 +176,8 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 		'AWS'             => 'Aws\Laravel\AwsFacade',
-		'Nexmo'           => 'Zee\Nexmo\Facades\Nexmo',
 		'Image'           => 'Intervention\Image\Facades\Image',
+		'Sms'             => 'Twilio\Laratwilio\Facades\Laratwilio'
 
 	),
 
