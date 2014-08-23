@@ -53,6 +53,9 @@ class MemberRelationsController extends \Controller {
 			), 403);
 		}
 
+		$datetime = new DateTime("tomorrow");
+		$tomorrow = $datetime->format("Y-m-d");
+
 		$validator = Validator::make(
 			array(
 				"is_alive" => Input::get("is_alive"),
@@ -65,8 +68,8 @@ class MemberRelationsController extends \Controller {
 			array(
 				"is_alive" => "required|in:0,1",
 				"name" => "required",
-				"dob" => "date",
-				"dod" => "date",
+				"dob" => "date|before:$tomorrow",
+				"dod" => "date|before:$tomorrow",
 				"mobile" => "numeric",
 				"relation" => "required|in:$correct_relations", // TODO: Specify only correct relations.
 			)

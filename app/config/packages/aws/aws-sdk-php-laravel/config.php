@@ -31,9 +31,9 @@ return array(
     | more information see http://docs.aws.amazon.com/aws-sdk-php-2/guide/latest/configuration.html
     |
     */
-    'key'    => $_SERVER["AWS_KEY"],
-    'secret' => $_SERVER["AWS_SECRET"],
-    'bucket' => $_SERVER["AWS_BUCKET"],
+    'key'    => getenv("AWS_KEY"),
+    'secret' => getenv("AWS_SECRET"),
+    'bucket' => getenv("AWS_BUCKET"),
 
     /*
     |--------------------------------------------------------------------------

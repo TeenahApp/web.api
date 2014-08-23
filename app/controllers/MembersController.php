@@ -94,6 +94,9 @@ class MembersController extends \Controller {
 			), 403);
 		}
 
+		$datetime = new DateTime("tomorrow");
+		$tomorrow = $datetime->format("Y-m-d");
+
 		$validator = Validator::make(
 			array(
 				"dob" => Input::get("dob"),
@@ -102,8 +105,8 @@ class MembersController extends \Controller {
 				"marital_status" => Input::get("marital_status")
 			),
 			array(
-				"dob" => "date",
-				"dod" => "date",
+				"dob" => "date|before:$tomorrow",
+				"dod" => "date|before:$tomorrow",
 				"email" => "email",
 				"marital_status" => "required|in:single,married,divorced,widow"
 			)

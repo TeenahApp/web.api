@@ -165,6 +165,9 @@ class UsersController extends \Controller {
 			), 403);
 		}
 
+		$datetime = new DateTime("tomorrow");
+		$tomorrow = $datetime->format("Y-m-d");
+
 		// Get the inputs from the user.
 		$validator = Validator::make(
 			array(
@@ -175,7 +178,7 @@ class UsersController extends \Controller {
 			array(
 				"gender" => "required|in:male,female",
 				"name" => "required",
-				"dob" => "required|date" // TODO: Consider this again.
+				"dob" => "required|date|before:$tomorrow"
 			)
 		);
 
