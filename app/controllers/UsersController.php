@@ -70,6 +70,9 @@ class UsersController extends \Controller {
 			), 403);
 		}
 
+		// Get the saved SMS token to validate with.
+		$saved_sms_token = Session::get("sms_token");
+
 		$validator = Validator::make(
 			array(
 				"mobile" => Input::get("mobile"),
@@ -77,7 +80,7 @@ class UsersController extends \Controller {
 			),
 			array(
 				"mobile" => "required|numeric",
-				"sms_token" => "required|numeric"
+				"sms_token" => "required|numeric|in:$saved_sms_token"
 			)
 		);
 
